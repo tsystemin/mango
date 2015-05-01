@@ -1,0 +1,89 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="in.co.tsystem.gamechanger.GcLoginActivity"
+    android:background="#ffff6a3d">
+
+    <!-- Login progress -->
+    <ProgressBar
+        android:id="@+id/login_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:visibility="gone"
+        android:layout_gravity="center" />
+
+    <RelativeLayout
+        android:id="@+id/login_form"
+        android:layout_width="wrap_content"
+        android:layout_height="223dp"
+        android:layout_marginStart="15sp"
+        android:layout_marginEnd="15sp"
+        android:layout_gravity="center|center_horizontal"
+        android:background="@drawable/home_page_button_style" >
+
+        <AutoCompleteTextView
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="50sp"
+            android:hint="prompt_email"
+            android:inputType="textEmailAddress"
+            android:background="@drawable/home_page_button_style"
+            android:layout_marginStart="15sp"
+            android:layout_marginEnd="15sp"
+            android:layout_marginBottom="15sp"
+            android:layout_above="@+id/password"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+        <EditText android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="50sp"
+            android:hint="prompt_password"
+            android:imeActionId="@+id/login"
+            android:imeActionLabel="action_sign_in_short"
+            android:imeOptions="actionUnspecified"
+            android:inputType="textPassword"
+            android:background="@drawable/home_page_button_style"
+            android:layout_marginStart="15sp"
+            android:layout_marginEnd="15sp"
+            android:layout_marginBottom="15sp"
+            android:layout_above="@+id/linearLayout"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="22sp"
+            android:id="@+id/linearLayout" >
+            <Button
+                android:id="@+id/email_sign_in_button"
+                android:layout_width="match_parent"
+                android:layout_height="50sp"
+                android:layout_weight="1.0"
+                android:text="LOG IN"
+                android:textColor="#ffffff"
+                android:layout_marginStart="15sp"
+                android:layout_marginEnd="10sp"
+                android:background="@drawable/home_page_button_style"
+                android:clickable="true"
+                android:onClick="gc_login" />
+            <Button
+                android:id="@+id/gc_sign_up_button"
+                android:layout_width="match_parent"
+                android:layout_height="50sp"
+                android:layout_weight="1.0"
+                android:text="SIGN UP"
+                android:textColor="#ffffff"
+                android:layout_marginStart="10sp"
+                android:layout_marginEnd="15sp"
+                android:background="@drawable/home_page_button_style"
+                android:clickable="true" />
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>
+
