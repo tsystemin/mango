@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ff7d3fff"
     tools:context="in.co.tsystem.gamechanger.GcRegisterActivity">
 
     <!-- Login progress -->
@@ -22,8 +23,7 @@
         <RelativeLayout
             android:id="@+id/register_form"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#ff7d3fff">
+            android:layout_height="match_parent" >
 
             <AutoCompleteTextView
                 android:layout_width="match_parent"
@@ -115,20 +115,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_marginBottom="22sp"
+                android:layout_marginBottom="50sp"
                 android:layout_below="@+id/editText6"
                 android:id="@+id/linearLayout" >
-                <Button
-                    android:id="@+id/email_sign_in_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="50sp"
-                    android:layout_weight="1.0"
-                    android:text="SIGN IN"
-                    android:textColor="#ffffff"
-                    android:layout_marginStart="15sp"
-                    android:layout_marginEnd="10sp"
-                    android:background="@drawable/home_page_button_style"
-                    android:clickable="true" />
                 <Button
                     android:id="@+id/gc_register_button"
                     android:layout_width="match_parent"
@@ -136,8 +125,8 @@
                     android:layout_weight="1.0"
                     android:text="REGISTER"
                     android:textColor="#ffffff"
-                    android:layout_marginStart="10sp"
-                    android:layout_marginEnd="15sp"
+                    android:layout_marginStart="25sp"
+                    android:layout_marginEnd="25sp"
                     android:background="@drawable/home_page_button_style"
                     android:clickable="true" />
             </LinearLayout>
