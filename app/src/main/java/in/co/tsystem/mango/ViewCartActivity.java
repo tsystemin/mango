@@ -36,7 +36,8 @@ public class ViewCartActivity extends ActionBarActivity {
     }
 
     public void showCart () {
-        String cartUrl = "http://10.0.0.139/opencart/?route=feed/rest_api/cart_products";
+        String ip = getString(R.string.server_ip);
+        String cartUrl = "http://"+ ip +"/opencart/?route=feed/rest_api/cart_products";
         try {
             myViewCartAsyncTask tsk = new myViewCartAsyncTask();
             tsk.execute(cartUrl);

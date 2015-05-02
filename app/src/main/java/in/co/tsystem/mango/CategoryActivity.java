@@ -388,7 +388,8 @@ public class CategoryActivity extends Activity {
             String url_new = null, ret = null;
             int version = 0;
 
-            url_new = "http://192.168.43.214/opencart/?route=feed/rest_api/categories&key=1234";
+            String ip = getString(R.string.server_ip);
+            url_new = "http://"+ ip +"/opencart/?route=feed/rest_api/categories&key=1234";
             ServerComm.RestService re = new ServerComm.RestService();
             jb = re.doGet(url_new);
             try {

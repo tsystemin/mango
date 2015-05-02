@@ -189,7 +189,8 @@ public class ProductListActivity extends Activity {
             int version = 0;
 
             //url_new = "http://10.0.0.103/opencart/?route=feed/rest_api/products&category=59&key=1234";
-            url_new = "http://192.168.43.214/opencart/?route=feed/rest_api/products&category="+cat_id+"&key=1234";
+            String ip = getString(R.string.server_ip);
+            url_new = "http://"+ ip +"/opencart/?route=feed/rest_api/products&category="+cat_id+"&key=1234";
             ServerComm.RestService re = new ServerComm.RestService();
             jb = re.doGet(url_new);
             try {

@@ -188,7 +188,8 @@ public class GcRegisterActivity extends Activity implements LoaderManager.Loader
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            String registerUri = "http://192.168.43.214/opencart/index.php?route=feed/rest_api/addNewCustomer";
+            String ip = getString(R.string.server_ip);
+            String registerUri = "http://"+ ip +"/opencart/index.php?route=feed/rest_api/addNewCustomer";
             String postData = "{'firstname' : " + firstname + ", 'lastname' : " + lastname +
                     ", 'email' : " + email + ", 'telephone' : " + phone +
                     ", 'password' : " + password + ", 'address_1' : " + address + "}";
