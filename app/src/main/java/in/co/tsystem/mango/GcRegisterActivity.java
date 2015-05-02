@@ -98,6 +98,11 @@ public class GcRegisterActivity extends Activity implements LoaderManager.Loader
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     private void populateAutoComplete() {
         getLoaderManager().initLoader(0, null, this);
     }

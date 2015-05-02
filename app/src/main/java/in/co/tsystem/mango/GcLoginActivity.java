@@ -100,6 +100,12 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
         mProgressView = findViewById(R.id.login_progress);
     }
 
+    // Return to main screen on back pressed
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     private void populateAutoComplete() {
         getLoaderManager().initLoader(0, null, this);
     }
@@ -272,6 +278,7 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
             super.onPostExecute(result);
             showProgress(false);
             mLoginFormView.setVisibility(View.GONE);
+            String USER_NAME = mEmailView.getText().toString();
             try {
                 HttpEntity entity = http_response.getEntity();
                 InputStream inputStream = null;
@@ -292,6 +299,7 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
                 Log.d("ASYNC_CATCH", aJsonString);
 
                 if (aJsonString.equals("TRUE")) {
+                    SaveSharedPreference.setUserName(mContext, USER_NAME);
                     Intent intent = new Intent(mContext, CategoryActivity.class);
                     startActivity(intent);
                 } else {

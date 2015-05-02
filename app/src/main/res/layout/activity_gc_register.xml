@@ -111,6 +111,19 @@
                 android:layout_alignRight="@+id/editText5"
                 android:layout_alignStart="@+id/editText5" />
 
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Automatically Sign me in."
+                android:id="@+id/checkBox"
+                android:layout_below="@+id/editText6"
+                android:layout_alignLeft="@+id/editText6"
+                android:layout_alignStart="@+id/editText6"
+                android:layout_alignRight="@+id/editText6"
+                android:layout_alignEnd="@+id/editText6"
+                android:enabled="true"
+                android:checked="true" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -67,40 +67,53 @@ public class MainActivity extends Activity implements View.OnClickListener,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Initialize Facebook SDK
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        callbackManager = CallbackManager.Factory.create();
 
-        //Initialize Google SDK
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Plus.API)
-                .addScope(Plus.SCOPE_PLUS_PROFILE)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
+        if(SaveSharedPreference.getUserName(MainActivity.this).length() == 0)
+        {
+            // call Login Activity
+            //Initialize Facebook SDK
+            FacebookSdk.sdkInitialize(getApplicationContext());
+            callbackManager = CallbackManager.Factory.create();
 
-        setContentView(R.layout.activity_main);
+            //Initialize Google SDK
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(Plus.API)
+                    .addScope(Plus.SCOPE_PLUS_PROFILE)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
 
-        //FB Login
-        fbLoginButton = (LoginButton) findViewById(R.id.fb_login_button);
-        fbLoginButton.setReadPermissions("user_friends");
-        fbLoginButton.setOnClickListener(this);
+            setContentView(R.layout.activity_main);
 
-        //Google+ Login
-        gLoginButton = (SignInButton) findViewById(R.id.g_login_button);
-        setGooglePlusButtonText(gLoginButton, "Sign In with Google");
-        gLoginButton.setOnClickListener(this);
-        gLoginButton.setSize(SignInButton.SIZE_WIDE);
+            //FB Login
+            fbLoginButton = (LoginButton) findViewById(R.id.fb_login_button);
+            fbLoginButton.setReadPermissions("user_friends");
+            fbLoginButton.setOnClickListener(this);
 
-        //GameChanger Login
-        gcSignInButton = (Button) findViewById(R.id.gc_sign_in_button);
-        gcSignInButton.setOnClickListener(this);
+            //Google+ Login
+            gLoginButton = (SignInButton) findViewById(R.id.g_login_button);
+            setGooglePlusButtonText(gLoginButton, "Sign In with Google");
+            gLoginButton.setOnClickListener(this);
+            gLoginButton.setSize(SignInButton.SIZE_WIDE);
 
-        //GameChanger Register
-        gcSignUpButton = (Button) findViewById(R.id.gc_sign_up_button);
-        gcSignUpButton.setOnClickListener(this);
+            //GameChanger Login
+            gcSignInButton = (Button) findViewById(R.id.gc_sign_in_button);
+            gcSignInButton.setOnClickListener(this);
 
-        main_view = findViewById(R.id.main_view);
+            //GameChanger Register
+            gcSignUpButton = (Button) findViewById(R.id.gc_sign_up_button);
+            gcSignUpButton.setOnClickListener(this);
+
+            main_view = findViewById(R.id.main_view);
+        }
+        else
+        {
+            // Call Next Activity
+            Intent intent = new Intent(this, CategoryActivity.class);
+            startActivity(intent);
+        }
+
+
     }
 
 

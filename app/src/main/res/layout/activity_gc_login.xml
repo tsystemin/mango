@@ -18,7 +18,7 @@
     <RelativeLayout
         android:id="@+id/login_form"
         android:layout_width="wrap_content"
-        android:layout_height="223dp"
+        android:layout_height="285sp"
         android:layout_marginStart="15sp"
         android:layout_marginEnd="15sp"
         android:layout_gravity="center|center_horizontal"
@@ -30,11 +30,12 @@
             android:layout_height="50sp"
             android:hint="prompt_email"
             android:inputType="textEmailAddress"
+            android:layout_marginTop="22sp"
             android:background="@drawable/home_page_button_style"
             android:layout_marginStart="15sp"
             android:layout_marginEnd="15sp"
             android:layout_marginBottom="15sp"
-            android:layout_above="@+id/password"
+            android:layout_alignParentTop="true"
             android:maxLines="1"
             android:singleLine="true" />
 
@@ -50,9 +51,21 @@
             android:layout_marginStart="15sp"
             android:layout_marginEnd="15sp"
             android:layout_marginBottom="15sp"
-            android:layout_above="@+id/linearLayout"
+            android:layout_below="@+id/email"
             android:maxLines="1"
             android:singleLine="true" />
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Automatically Sign me in."
+            android:id="@+id/checkBox"
+            android:layout_below="@+id/password"
+            android:layout_alignLeft="@+id/password"
+            android:layout_alignStart="@+id/password"
+            android:layout_alignRight="@+id/password"
+            android:layout_alignEnd="@+id/password"
+            android:enabled="true"
+            android:checked="true" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -84,6 +97,7 @@
                 android:background="@drawable/home_page_button_style"
                 android:clickable="true" />
         </LinearLayout>
+
     </RelativeLayout>
 </LinearLayout>
 
