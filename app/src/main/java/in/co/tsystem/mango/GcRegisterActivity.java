@@ -344,6 +344,7 @@ public class GcRegisterActivity extends Activity implements LoaderManager.Loader
             super.onPostExecute(result);
             showProgress(false);
             mRegisterFormView.setVisibility(View.GONE);
+            String USER_NAME = mEmailView.getText().toString();
             try {
                 HttpEntity entity = result.getEntity();
                 InputStream inputStream = null;
@@ -364,6 +365,7 @@ public class GcRegisterActivity extends Activity implements LoaderManager.Loader
                 Log.d("ASYNC_CATCH", aJsonString);
 
                 if (aJsonString.equals("TRUE")) {
+                    SaveSharedPreference.setUserName(mContext, USER_NAME);
                     Intent intent = new Intent(mContext, CategoryActivity.class);
                     startActivity(intent);
                 } else {

@@ -191,14 +191,14 @@ public class MainActivity extends Activity implements View.OnClickListener,
         //}
     }
 
-    @Override
+    /*@Override
     protected void onStop() {
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
 
         super.onStop();
-    }
+    }*/
 
     @Override
     public void onDestroy() {
