@@ -96,16 +96,6 @@ public class GcRegisterActivity extends Activity implements LoaderManager.Loader
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mRegisterFormView.setVisibility(true ? View.GONE : View.VISIBLE);
-                Intent intent = new Intent(getApplicationContext(), GcLoginActivity.class);
-                startActivity(intent);
-            }
-        });
-
     }
 
     private void populateAutoComplete() {
@@ -193,7 +183,7 @@ public class GcRegisterActivity extends Activity implements LoaderManager.Loader
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            String registerUri = "http://10.0.0.139/opencart/index.php?route=feed/rest_api/addNewCustomer";
+            String registerUri = "http://192.168.43.214/opencart/index.php?route=feed/rest_api/addNewCustomer";
             String postData = "{'firstname' : " + firstname + ", 'lastname' : " + lastname +
                     ", 'email' : " + email + ", 'telephone' : " + phone +
                     ", 'password' : " + password + ", 'address_1' : " + address + "}";

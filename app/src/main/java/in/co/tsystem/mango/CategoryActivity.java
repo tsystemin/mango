@@ -182,78 +182,6 @@ public class CategoryActivity extends Activity {
 
     }
 
-    public class RestService {
-
-        public JSONObject doGet(String url) {
-            JSONObject json = null;
-
-            HttpClient httpclient = new DefaultHttpClient();
-            // Prepare a request object
-            HttpGet httpget = new HttpGet(url);
-            // Accept JSON
-            httpget.addHeader("accept", "application/json");
-            // Execute the request
-            HttpResponse response;
-
-            try {
-                response = httpclient.execute(httpget);
-                // Get the response entity
-                // Log.e("myApp", "Issue is here...!");
-                HttpEntity entity = response.getEntity();
-                // If response entity is not null
-                if (entity != null) {
-                    // get entity contents and convert it to string
-                    InputStream instream = entity.getContent();
-                    String result= convertStreamToString(instream);
-                    // construct a JSON object with result
-                    json=new JSONObject(result);
-                    // Closing the input stream will trigger connection release
-                    instream.close();
-                }
-            } catch (ClientProtocolException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            // Return the json
-            return json;
-        }
-
-        private String convertStreamToString(InputStream is) {
-
-            BufferedReader br = null;
-            StringBuilder sb = new StringBuilder();
-
-            String line;
-            try {
-
-                br = new BufferedReader(new InputStreamReader(is));
-                while ((line = br.readLine()) != null) {
-                    sb.append(line);
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (br != null) {
-                    try {
-                        br.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            return sb.toString();
-        }
-    }
-
-
     private class getCategories extends AsyncTask< Void, Void, JSONObject > {
 
         JSONObject jb;
@@ -430,8 +358,8 @@ public class CategoryActivity extends Activity {
             String url_new = null, ret = null;
             int version = 0;
 
-            url_new = "http://10.0.0.139/opencart/?route=feed/rest_api/categories&key=1234";
-            RestService re = new RestService();
+            url_new = "http://192.168.43.214/opencart/?route=feed/rest_api/categories&key=1234";
+            ServerComm.RestService re = new ServerComm.RestService();
             jb = re.doGet(url_new);
             try {
                 ret = jb.getString("success");
