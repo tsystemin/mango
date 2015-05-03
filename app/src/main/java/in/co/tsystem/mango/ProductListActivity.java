@@ -152,6 +152,12 @@ public class ProductListActivity extends Activity {
                     public void onItemClick(AdapterView<?> parent, final View view,
                                             int position, long id) {
                         final String item = (String) parent.getItemAtPosition(position);
+
+                        Integer idprod = ProdIdMap.get(item);
+                        Intent intent = new Intent(mContext, ProductDetailActivity.class);
+                        intent.putExtra("prod_id", idprod);
+                        startActivity(intent);
+                        /*
                         view.animate().setDuration(2000).alpha(0)
                                 .withEndAction(new Runnable() {
                                     @Override
@@ -160,15 +166,20 @@ public class ProductListActivity extends Activity {
                                         int duration = Toast.LENGTH_SHORT;
                                         String txt;
 
-                                        list.remove(item);
+                                        //list.remove(item);
                                         // AVI - looks like item is position on table
                                         idprod = ProdIdMap.get(item);
-                                        txt = "item " + item + "id " + idprod;
-                                        Toast.makeText(mContext, txt, duration).show();
-                                        adapter.notifyDataSetChanged();
-                                        view.setAlpha(1);
+                                        //txt = "item " + item + "id " + idprod;
+
+                                        Intent intent = new Intent(mContext, ProductDetailActivity.class);
+                                        intent.putExtra("prod_id", idprod);
+                                        startActivity(intent);
+
+                                        //Toast.makeText(mContext, txt, duration).show();
+                                        //adapter.notifyDataSetChanged();
+                                        //view.setAlpha(1);
                                     }
-                                });
+                                });*/
 
                     }
                 });

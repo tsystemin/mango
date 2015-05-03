@@ -90,6 +90,10 @@
             android:name=".ProductListActivity"
             android:label="@string/title_activity_product_list" >
         </activity>
+        <activity
+            android:name=".ProductDetailActivity"
+            android:label="@string/title_activity_product_detail" >
+        </activity>
     </application>
 
 </manifest>
