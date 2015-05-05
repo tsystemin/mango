@@ -290,6 +290,13 @@ public class CategoryActivity extends Activity {
                     public void onItemClick(AdapterView<?> parent, final View view,
                                             int position, long id) {
                         final String item = (String) parent.getItemAtPosition(position);
+
+                        Integer idprod = ProdIdMap.get(item);
+                        Intent intent = new Intent(mContext, ProductListActivity.class);
+                        intent.putExtra("category_id", idprod);
+                        startActivity(intent);
+
+                        /*
                         view.animate().setDuration(2000).alpha(0)
                                 .withEndAction(new Runnable() {
                                     @Override
@@ -301,8 +308,8 @@ public class CategoryActivity extends Activity {
 
                                         // AVI - looks like item is position on table
                                         idprod = ProdIdMap.get(item);
-                                        txt = "item " + item + "id " + idprod;
-                                        Toast.makeText(mContext, txt, duration).show();
+                                        //txt = "item " + item + "id " + idprod;
+                                        //Toast.makeText(mContext, txt, duration).show();
 
 
                                         Intent intent = new Intent(mContext, ProductListActivity.class);
@@ -313,7 +320,7 @@ public class CategoryActivity extends Activity {
                                         //adapter.notifyDataSetChanged();
                                         //view.setAlpha(1);
                                     }
-                                });
+                                });*/
 
                     }
                 });

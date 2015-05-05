@@ -17,6 +17,7 @@
     <string name="title_activity_http_post_function">HttpPostFunction</string>
     <string name="title_activity_view_cart">ViewCartActivity</string>
     <string name="title_activity_server_comm">ServerComm</string>
-    <string name="server_ip">192.168.43.214</string>
+    <string name="server_ip">10.0.0.109</string>
+    <string name="title_activity_product_detail">ProductDetailActivity</string>
 
 </resources>
