@@ -41,6 +41,10 @@
         android:id="@+id/listView1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignBottom="@+id/gridview1" />
+        android:layout_alignBottom="@+id/gridview1"
+        android:background="#ff2a2f55"
+        android:divider="#ffffffff"
+        android:dividerHeight="1sp"
+        android:drawSelectorOnTop="true" />
 
 </RelativeLayout>
