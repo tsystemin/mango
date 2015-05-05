@@ -4,9 +4,11 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -368,8 +370,18 @@ public class GcRegisterActivity extends Activity implements LoaderManager.Loader
                     SaveSharedPreference.setUserName(mContext, USER_NAME);
                     Intent intent = new Intent(mContext, CategoryActivity.class);
                     startActivity(intent);
+                } else if (aJsonString.equals("EXISTS")) {
+                    new AlertDialog.Builder(mContext)
+                            .setTitle("Duplicate Email")
+                            .setMessage("This USER exists!")
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // continue with delete
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
                 } else {
-                    Log.d("ASYNC_CATCH wrong username / password", aJsonString);
                 }
             } catch (Exception e) {
                 // Oops
