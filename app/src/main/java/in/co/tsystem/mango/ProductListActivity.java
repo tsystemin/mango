@@ -53,7 +53,7 @@ public class ProductListActivity extends Activity {
     }
 
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_product_list, menu);
@@ -73,7 +73,7 @@ public class ProductListActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     private class getProductList extends AsyncTask< Void, Void, JSONObject > {
 

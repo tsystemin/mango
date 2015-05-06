@@ -57,6 +57,7 @@
         <activity
             android:name=".CategoryActivity"
             android:label="@string/title_activity_category"
+            android:theme="@style/Theme.AppCompat.Light"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

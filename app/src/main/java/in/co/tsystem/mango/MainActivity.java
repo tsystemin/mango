@@ -68,7 +68,11 @@ public class MainActivity extends Activity implements View.OnClickListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(SaveSharedPreference.getUserName(MainActivity.this).length() == 0)
+        final String USER = SaveSharedPreference.getUserName(MainActivity.this);
+        final String PASS = SaveSharedPreference.getPass(MainActivity.this);
+
+        if((SaveSharedPreference.getUserName(MainActivity.this).length() == 0) ||
+                (SaveSharedPreference.getPass(MainActivity.this).length() == 0))
         {
             // call Login Activity
             //Initialize Facebook SDK
@@ -108,9 +112,13 @@ public class MainActivity extends Activity implements View.OnClickListener,
         }
         else
         {
+            // Login to the server
+            Log.d("MAIN ELSE", "came here");
+            GcLoginActivity gcLoginActivity = new GcLoginActivity();
+            gcLoginActivity.attemptLogin(USER, PASS);
             // Call Next Activity
-            Intent intent = new Intent(this, CategoryActivity.class);
-            startActivity(intent);
+            //Intent intent = new Intent(this, CategoryActivity.class);
+            //startActivity(intent);
         }
 
 

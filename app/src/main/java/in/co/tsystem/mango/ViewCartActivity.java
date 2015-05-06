@@ -1,5 +1,6 @@
 package in.co.tsystem.mango;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
@@ -11,10 +12,11 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
+import org.apache.http.HttpResponse;
 import org.json.JSONObject;
 
 
-public class ViewCartActivity extends ActionBarActivity {
+public class ViewCartActivity extends Activity {
     private JSONObject response;
 
     @Override
@@ -22,34 +24,8 @@ public class ViewCartActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_cart);
 
-        //Show the cart
-        showCart();
-
-        Button mCheckOut = (Button) findViewById(R.id.check_out);
-        mCheckOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Call the check out function which invokes check out actvity
-                //checkOut();
-            }
-        });
-    }
-
-    public void showCart () {
-        String ip = getString(R.string.server_ip);
-        String cartUrl = "http://"+ ip +"/opencart/?route=feed/rest_api/cart_products";
-        try {
-            myViewCartAsyncTask tsk = new myViewCartAsyncTask();
-            tsk.execute(cartUrl);
-            Log.d("RESP", response.toString());
-            if (response.optString("success") == "TRUE") {
-                Intent intent = new Intent(this, CategoryActivity.class);
-                startActivity(intent);
-                Log.d("CATEGORY", "Inflated category");
-            }
-        } catch (Exception e) {
-
-        }
+        myViewCartAsyncTask tsk = new myViewCartAsyncTask();
+        tsk.execute();
     }
 
     public void checkOut (View view) {
@@ -58,11 +34,26 @@ public class ViewCartActivity extends ActionBarActivity {
     }
 
     // Async task to send login request in a separate thread
-    private class myViewCartAsyncTask extends AsyncTask<String, Void, Void> {
+    private class myViewCartAsyncTask extends AsyncTask<Void, Void, JSONObject> {
 
         @Override
-        protected void onPostExecute(Void result) {
+        protected void onPostExecute(JSONObject result) {
             super.onPostExecute(result);
+            Log.d("RESP", result.toString());
+            /*
+             Button mCheckOut = (Button) findViewById(R.id.check_out);
+        mCheckOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Call the check out function which invokes check out actvity
+                //checkOut();
+            }
+        });
+            if (response.optString("success") == "TRUE") {
+                //Intent intent = new Intent(this, CategoryActivity.class);
+                //startActivity(intent);
+                Log.d("CATEGORY", "Inflated cart");
+            }*/
         }
 
         @Override
@@ -71,12 +62,13 @@ public class ViewCartActivity extends ActionBarActivity {
         }
 
         @Override
-        protected Void doInBackground(String... arg0) {
-
+        protected JSONObject doInBackground(Void... arg0) {
+            String ip = getString(R.string.server_ip);
+            String cartUrl = "http://"+ ip +"/opencart/?route=feed/rest_api/cart_products&key=1234";
             ServerComm.RestService re = new ServerComm.RestService();
-            response = re.doGet(arg0[0]);
+            response = re.doGet(cartUrl);
 
-            return null;
+            return response;
         }
     }
 

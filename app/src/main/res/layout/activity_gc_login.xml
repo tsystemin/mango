@@ -57,14 +57,14 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Automatically Sign me in."
+            android:text="Automatic Sign In from next time"
             android:id="@+id/checkBox"
             android:layout_below="@+id/password"
             android:layout_alignLeft="@+id/password"
             android:layout_alignStart="@+id/password"
             android:layout_alignRight="@+id/password"
             android:layout_alignEnd="@+id/password"
-            android:enabled="true"
+            android:enabled="false"
             android:checked="true" />
 
         <LinearLayout
@@ -85,17 +85,6 @@
                 android:background="@drawable/home_page_button_style"
                 android:clickable="true"
                 android:onClick="gc_login" />
-            <Button
-                android:id="@+id/gc_sign_up_button"
-                android:layout_width="match_parent"
-                android:layout_height="50sp"
-                android:layout_weight="1.0"
-                android:text="SIGN UP"
-                android:textColor="#ffffff"
-                android:layout_marginStart="10sp"
-                android:layout_marginEnd="15sp"
-                android:background="@drawable/home_page_button_style"
-                android:clickable="true" />
         </LinearLayout>
 
     </RelativeLayout>
