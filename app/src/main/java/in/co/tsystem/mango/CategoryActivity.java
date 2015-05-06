@@ -1,61 +1,41 @@
 package in.co.tsystem.mango;
 
-import android.app.Activity;
+
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.ImageSwitcher;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewSwitcher;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 
-public class CategoryActivity extends Activity {
-    //private static final int[] IMAGES = { R.drawable.button, R.drawable.pause };
-    //private int mPosition = 0;
-    //private ImageSwitcher mImageSwitcher;
-
-    //private DataHelper dbHelper = null;
+public class CategoryActivity extends ActionBarActivity implements View.OnClickListener {
     private GridViewAdapter ga;
     //myAsyncTask tsk;
     getCategories parent_tsk;
     int newCatDbVer = 0;
+    ImageView cart;
 
     Boolean doubleBackToExitPressedOnce = false;
 
@@ -63,67 +43,34 @@ public class CategoryActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.d("Calling onCreate", "");
-
         setContentView(R.layout.activity_category);
         String image_url = null;
-
-
-        //dbHelper = new DataHelper(this);
 
         parent_tsk = new getCategories(this);
         parent_tsk.execute();
 
-        /*
-        mImageSwitcher = (ImageSwitcher) findViewById(R.id.imageSwitcher);
-        mImageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
-            @Override
-            public View makeView() {
-                ImageView imageView = new ImageView(MainActivity.this);
-                return imageView;
-            }
-        });
-        mImageSwitcher.setInAnimation(this, android.R.anim.slide_in_left);
-        mImageSwitcher.setOutAnimation(this, android.R.anim.slide_out_right);
+        // Add cart icon to the action bar
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowCustomEnabled(true);
 
-        onSwitch(null);
+        LayoutInflater inflator = (LayoutInflater) this .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflator.inflate(R.layout.actionbar_custom_view, null);
 
-        mImageSwitcher.postDelayed(new Runnable() {
-            int i = 0;
-            public void run() {
-                mImageSwitcher.setBackgroundResource(IMAGES[mPosition]);
-                mPosition = (mPosition + 1) % IMAGES.length;
-                mImageSwitcher.postDelayed(this, 3000);
-            }
-        }, 3000);*/
+        actionBar.setCustomView(v);
+
+        cart = (ImageView) findViewById(R.id.imageView4);
+        cart.setOnClickListener(this);
+
     }
 
-    /*
-    public void onSwitch(View view) {
-        mImageSwitcher.setBackgroundResource(IMAGES[mPosition]);
-        mPosition = (mPosition + 1) % IMAGES.length;
-    }
-*/
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.imageView4:
+                view_cart(view);
+                break;
+            default:
+                break;
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -296,92 +243,11 @@ public class CategoryActivity extends Activity {
                         intent.putExtra("category_id", idprod);
                         startActivity(intent);
 
-                        /*
-                        view.animate().setDuration(2000).alpha(0)
-                                .withEndAction(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Integer idprod;
-                                        int duration = Toast.LENGTH_SHORT;
-                                        String txt;
-
-
-                                        // AVI - looks like item is position on table
-                                        idprod = ProdIdMap.get(item);
-                                        //txt = "item " + item + "id " + idprod;
-                                        //Toast.makeText(mContext, txt, duration).show();
-
-
-                                        Intent intent = new Intent(mContext, ProductListActivity.class);
-                                        intent.putExtra("category_id", idprod);
-                                        startActivity(intent);
-
-                                        //list.remove(item);
-                                        //adapter.notifyDataSetChanged();
-                                        //view.setAlpha(1);
-                                    }
-                                });*/
-
                     }
                 });
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-/*
-            Integer db_ver_stored = 0;
-
-            try {
-                BufferedReader inputReader = new BufferedReader(new InputStreamReader(
-                        openFileInput("CartDbVer")));
-                String inputString;
-                //StringBuffer stringBuffer = new StringBuffer();
-                while ((inputString = inputReader.readLine()) != null) {
-                    //stringBuffer.append(inputString + "\n");
-                    db_ver_stored = Integer.parseInt(inputString
-                    );
-                }
-
-            } catch (IOException e) {
-                //e.printStackTrace();
-                db_ver_stored = 0;
-            }
-
-            //Log.d("DB_VER_AND", dbHelper.DATABASE_VERSION + "" );
-            Log.d("DB_VER_STORED is "+ db_ver_stored , "");
-            //if (result != dbHelper.getVersionnew()) {
-            if (result != db_ver_stored) {
-                // download catalog db
-                newCatDbVer = result;
-
-                //write version to file
-                try {
-                    FileOutputStream fos = openFileOutput("CartDbVer", Context.MODE_PRIVATE);
-                    fos.write(result.toString().getBytes());
-                    fos.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                //dbHelper.onUpgrade(dbHelper.getDb(),db_ver_stored,result);
-                //tsk.execute();
-            } else {
-                // populate grid view from database
-
-                GridView gv = (GridView)findViewById(R.id.gridview1);
-                GridViewAdapter ga1 = new GridViewAdapter(mContext);
-                gv.setAdapter(ga1);
-
-                gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    public void onItemClick(AdapterView<?> parent,
-                                            View view, int position, long id) {
-                        Toast.makeText(MainActivity.this, "" + position,
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            }
-*/
 
         }
 
@@ -410,5 +276,11 @@ public class CategoryActivity extends Activity {
             return jb;
         }
     }
+
+    public void view_cart(View view) {
+        Intent intent = new Intent(this, ViewCartActivity.class);
+        startActivity(intent);
+    }
+
 }
 
