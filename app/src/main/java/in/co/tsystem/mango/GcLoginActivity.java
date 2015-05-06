@@ -7,9 +7,11 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -79,7 +81,9 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
                     InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                    attemptLogin();
+                    String email = mEmailView.getText().toString();
+                    String password = mPasswordView.getText().toString();
+                    attemptLogin(email, password);
                     return true;
                 }
                 return false;
@@ -92,7 +96,9 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
             public void onClick(View view) {
                 InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                attemptLogin();
+                String email = mEmailView.getText().toString();
+                String password = mPasswordView.getText().toString();
+                attemptLogin(email, password);
             }
         });
 
@@ -115,15 +121,15 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    public void attemptLogin() {
+    public void attemptLogin(String email, String password) {
 
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        //String email = mEmailView.getText().toString();
+        //String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -137,11 +143,11 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
-           // mEmailView.setError(getString(R.string.error_field_required));
+            mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
         } else if (!isEmailValid(email)) {
-          //  mEmailView.setError(getString(R.string.error_invalid_email));
+           mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
         }
@@ -297,14 +303,22 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
                 myresult = sb.toString();
                 JSONObject json_result = new JSONObject(myresult);
                 String aJsonString = json_result.getString("success");
-                Log.d("ASYNC_CATCH", aJsonString);
 
                 if (aJsonString.equals("TRUE")) {
                     SaveSharedPreference.setUserName(mContext, USER_NAME);
                     Intent intent = new Intent(mContext, CategoryActivity.class);
                     startActivity(intent);
                 } else {
-                    Log.d("ASYNC_CATCH wrong username / password", aJsonString);
+                    new AlertDialog.Builder(mContext)
+                            .setTitle("Invalid Credentials!")
+                            .setMessage("UserName/Password doesn't match.")
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // continue with delete
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
                 }
             } catch (Exception e) {
                 // Oops
@@ -326,6 +340,7 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
                 obj = new JSONObject(arg0[1]);
                 HttpPostFunction sChannel = new HttpPostFunction();
                 http_response = sChannel.processPost(arg0[0], obj);
+
                 Thread.sleep(2000);
             } catch (Exception e) {
                 Log.d("ASYNC CATCH", "exception");
