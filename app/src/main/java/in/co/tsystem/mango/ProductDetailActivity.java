@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -84,7 +85,7 @@ public class ProductDetailActivity extends Activity {
         @Override
         protected void onPostExecute(Bitmap result) {
             JSONObject prod;
-            String price;
+            String price, desc;
             super.onPostExecute(result);
             ImageView im = (ImageView)findViewById(R.id.PimageView);
             im.setImageBitmap(result);
@@ -97,9 +98,28 @@ public class ProductDetailActivity extends Activity {
                     tv.setText(price);
                 } catch (Exception e) {
                 }
+
+                try {
+                    desc = prod.getString("description");
+                    TextView tvd = (TextView)findViewById(R.id.PtextView);
+                    tvd.setText(desc);
+                } catch (Exception e) {
+                }
             } catch (Exception e) {
 
             }
+
+            Button b = (Button)findViewById(R.id.Pbutton);
+            b.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v)
+                {
+                    //DO SOMETHING! {RUN SOME FUNCTION ... DO CHECKS... ETC}
+                    addToCart cart_tsk = new addToCart(mContext);
+                    cart_tsk.execute(prod_id);
+
+                }
+            });
+
         }
 
         @Override
@@ -189,6 +209,49 @@ public class ProductDetailActivity extends Activity {
 
             String ip = getString(R.string.server_ip);
             url_new = "http://"+ ip +"/opencart/?route=feed/rest_api/product&id="+ arg[0] +"&key=1234";
+
+            Log.i("PRODDET prod_id is", arg[0] + "");
+            ServerComm.RestService re = new ServerComm.RestService();
+            jb = re.doGet(url_new);
+            try {
+                //ver = jb.getString("db_ver");
+                //version = Integer.parseInt(ver);
+                Log.i("PRODDET", jb.toString() + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return jb;
+        }
+    }
+
+    private class addToCart extends AsyncTask< Integer, Void, JSONObject > {
+
+        JSONObject jb;
+        private Context mContext;
+        BufferedReader br;
+
+        public addToCart(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject result) {
+            super.onPostExecute(result);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected JSONObject doInBackground(Integer... arg) {
+
+            String url_new = null, ver = null;
+            int version = 0;
+
+            String ip = getString(R.string.server_ip);
+            url_new = "http://"+ ip +"/opencart/?route=feed/rest_api/cart_add&product_id="+ arg[0] +"&key=1234"; // add count
 
             Log.i("PRODDET prod_id is", arg[0] + "");
             ServerComm.RestService re = new ServerComm.RestService();
