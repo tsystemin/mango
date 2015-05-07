@@ -31,9 +31,11 @@ import android.widget.TextView;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -49,8 +51,7 @@ public class GcRegisterActivity extends Activity implements LoaderManager.Loader
     private AutoCompleteTextView mEmailView, mNameView, mPhoneView, mAddrView;
     private EditText mPasswordView, mCPasswordView;
     private View mProgressView, mRegisterFormView;
-    //  HttpResponse response;
-    HttpResponse http_response;
+    HttpResponse response;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,8 +191,9 @@ public class GcRegisterActivity extends Activity implements LoaderManager.Loader
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            String ip = getString(R.string.server_ip);
-            String registerUri = "http://"+ ip +"/opencart/index.php?route=feed/rest_api/addNewCustomer";
+            mangoGlobals mg = mangoGlobals.getInstance();
+            String server_ip = mg.server_ip;
+            String registerUri = "http://"+ server_ip +"/opencart/index.php?route=feed/rest_api/addNewCustomer";
             String postData = "{'firstname' : " + firstname + ", 'lastname' : " + lastname +
                     ", 'email' : " + email + ", 'telephone' : " + phone +
                     ", 'password' : " + password + ", 'address_1' : " + address + "}";
@@ -347,6 +349,7 @@ public class GcRegisterActivity extends Activity implements LoaderManager.Loader
             showProgress(false);
             mRegisterFormView.setVisibility(View.GONE);
             String USER_NAME = mEmailView.getText().toString();
+            String PASS = mPasswordView.getText().toString();
             try {
                 HttpEntity entity = result.getEntity();
                 InputStream inputStream = null;
@@ -368,6 +371,7 @@ public class GcRegisterActivity extends Activity implements LoaderManager.Loader
 
                 if (aJsonString.equals("TRUE")) {
                     SaveSharedPreference.setUserName(mContext, USER_NAME);
+                    SaveSharedPreference.setPassword(mContext, PASS);
                     Intent intent = new Intent(mContext, CategoryActivity.class);
                     startActivity(intent);
                 } else if (aJsonString.equals("EXISTS")) {
@@ -401,13 +405,18 @@ public class GcRegisterActivity extends Activity implements LoaderManager.Loader
             try {
                 obj = new JSONObject(arg0[1]);
                 HttpPostFunction sChannel = new HttpPostFunction();
-                http_response = sChannel.processPost(arg0[0], obj);
+                response = sChannel.processPost(arg0[0], obj);
                 Thread.sleep(2000);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             } catch (Exception e) {
-                Log.d("ASYNC CATCH", "exception");
+                e.printStackTrace();
             }
 
-            return http_response;
+            return response;
         }
     }
 }

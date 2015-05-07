@@ -39,11 +39,15 @@ public class ProductListActivity extends Activity {
 
     getProductList tsk;
     int cat_id = 0;
+    String server_ip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
+
+        mangoGlobals mg = mangoGlobals.getInstance();
+        server_ip = mg.server_ip;
 
         Intent myIntent = getIntent();
         cat_id = myIntent.getIntExtra("category_id", 0);
@@ -200,8 +204,8 @@ public class ProductListActivity extends Activity {
             int version = 0;
 
             //url_new = "http://10.0.0.103/opencart/?route=feed/rest_api/products&category=59&key=1234";
-            String ip = getString(R.string.server_ip);
-            url_new = "http://"+ ip +"/opencart/?route=feed/rest_api/products&category="+cat_id+"&key=1234";
+            //String ip = getString(R.string.server_ip);
+            url_new = "http://"+ server_ip +"/opencart/?route=feed/rest_api/products&category="+cat_id+"&key=1234";
             ServerComm.RestService re = new ServerComm.RestService();
             jb = re.doGet(url_new);
             try {

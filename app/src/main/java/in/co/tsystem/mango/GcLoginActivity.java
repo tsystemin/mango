@@ -62,8 +62,7 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private JSONObject response;
-    HttpResponse http_response;
+    private HttpResponse response;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,9 +80,7 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
                     InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                    String email = mEmailView.getText().toString();
-                    String password = mPasswordView.getText().toString();
-                    attemptLogin(email, password);
+                    attemptLogin();
                     return true;
                 }
                 return false;
@@ -96,9 +93,7 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
             public void onClick(View view) {
                 InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                String email = mEmailView.getText().toString();
-                String password = mPasswordView.getText().toString();
-                attemptLogin(email, password);
+                attemptLogin();
             }
         });
 
@@ -121,15 +116,15 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    public void attemptLogin(String email, String password) {
+    public void attemptLogin() {
 
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        //String email = mEmailView.getText().toString();
-        //String password = mPasswordView.getText().toString();
+        String email = mEmailView.getText().toString();
+        String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -159,10 +154,12 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-
-            showProgress(true);
-            String ip = getString(R.string.server_ip);
-            String registerUri = "http://"+ ip +"/opencart/index.php?route=feed/rest_api/customerLogin&key=1234";
+            if (mLoginFormView != null) {
+                showProgress(true);
+            }
+            mangoGlobals mg = mangoGlobals.getInstance();
+            String server_ip = mg.server_ip;
+            String registerUri = "http://"+ server_ip +"/opencart/index.php?route=feed/rest_api/customerLogin&key=1234";
             String postData = "{'email' : " + email + ", 'password' : " + password + "}";
 
             try {
@@ -171,6 +168,20 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
             } catch (Throwable t) {
                 Log.e("My App", "Could not : " + t);
             }
+        }
+    }
+
+    public void silentLogin(String email, String password) {
+        mangoGlobals mg = mangoGlobals.getInstance();
+        String server_ip = mg.server_ip;
+        String registerUri = "http://"+ server_ip +"/opencart/index.php?route=feed/rest_api/customerLogin&key=1234";
+        String postData = "{'email' : " + email + ", 'password' : " + password + "}";
+
+        try {
+            silentLoginAsyncTask tsk = new silentLoginAsyncTask();
+            tsk.execute(registerUri, postData);
+        } catch (Throwable t) {
+            t.printStackTrace();
         }
     }
 
@@ -283,11 +294,14 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
         @Override
         protected void onPostExecute(HttpResponse result) {
             super.onPostExecute(result);
-            showProgress(false);
+            if (mLoginFormView != null) {
+                showProgress(false);
+            }
             mLoginFormView.setVisibility(View.GONE);
             String USER_NAME = mEmailView.getText().toString();
+            String PASS = mPasswordView.getText().toString();
             try {
-                HttpEntity entity = http_response.getEntity();
+                HttpEntity entity = response.getEntity();
                 InputStream inputStream = null;
                 String myresult = null;
 
@@ -306,6 +320,7 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
 
                 if (aJsonString.equals("TRUE")) {
                     SaveSharedPreference.setUserName(mContext, USER_NAME);
+                    SaveSharedPreference.setPassword(mContext, PASS);
                     Intent intent = new Intent(mContext, CategoryActivity.class);
                     startActivity(intent);
                 } else {
@@ -335,18 +350,46 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
         protected HttpResponse doInBackground(String... arg0) {
             JSONObject obj;
 
-            InputStream inputStream = null;
             try {
                 obj = new JSONObject(arg0[1]);
                 HttpPostFunction sChannel = new HttpPostFunction();
-                http_response = sChannel.processPost(arg0[0], obj);
+                response = sChannel.processPost(arg0[0], obj);
 
                 Thread.sleep(2000);
             } catch (Exception e) {
-                Log.d("ASYNC CATCH", "exception");
+                e.printStackTrace();
             }
 
-            return http_response;
+            return response;
+        }
+    }
+
+    private class silentLoginAsyncTask extends AsyncTask<String, Void, HttpResponse> {
+        @Override
+        protected void onPostExecute(HttpResponse result) {
+            super.onPostExecute(result);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected HttpResponse doInBackground(String... arg0) {
+            JSONObject obj;
+
+            try {
+                obj = new JSONObject(arg0[1]);
+                HttpPostFunction sChannel = new HttpPostFunction();
+                response = sChannel.processPost(arg0[0], obj);
+
+                Thread.sleep(2000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return response;
         }
     }
 

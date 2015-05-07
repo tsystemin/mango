@@ -32,8 +32,6 @@ import com.google.android.gms.plus.model.people.Person;
 
 import java.io.InputStream;
 
-import in.co.tsystem.mango.R;
-
 
 public class MainActivity extends Activity implements View.OnClickListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
@@ -71,8 +69,7 @@ public class MainActivity extends Activity implements View.OnClickListener,
         final String USER = SaveSharedPreference.getUserName(MainActivity.this);
         final String PASS = SaveSharedPreference.getPass(MainActivity.this);
 
-        if((SaveSharedPreference.getUserName(MainActivity.this).length() == 0) ||
-                (SaveSharedPreference.getPass(MainActivity.this).length() == 0))
+        if(USER.length() == 0 || PASS.length() == 0)
         {
             // call Login Activity
             //Initialize Facebook SDK
@@ -113,12 +110,11 @@ public class MainActivity extends Activity implements View.OnClickListener,
         else
         {
             // Login to the server
-            Log.d("MAIN ELSE", "came here");
             GcLoginActivity gcLoginActivity = new GcLoginActivity();
-            gcLoginActivity.attemptLogin(USER, PASS);
+            gcLoginActivity.silentLogin(USER, PASS);
             // Call Next Activity
-            //Intent intent = new Intent(this, CategoryActivity.class);
-            //startActivity(intent);
+            Intent intent = new Intent(this, CategoryActivity.class);
+            startActivity(intent);
         }
 
 

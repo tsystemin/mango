@@ -18,11 +18,15 @@ import org.json.JSONObject;
 
 public class ViewCartActivity extends Activity {
     private JSONObject response;
+    String server_ip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_cart);
+
+        mangoGlobals mg = mangoGlobals.getInstance();
+        server_ip = mg.server_ip;
 
         myViewCartAsyncTask tsk = new myViewCartAsyncTask();
         tsk.execute();
@@ -63,8 +67,8 @@ public class ViewCartActivity extends Activity {
 
         @Override
         protected JSONObject doInBackground(Void... arg0) {
-            String ip = getString(R.string.server_ip);
-            String cartUrl = "http://"+ ip +"/opencart/?route=feed/rest_api/cart_products&key=1234";
+            //String ip = getString(R.string.server_ip);
+            String cartUrl = "http://"+ server_ip +"/opencart/?route=feed/rest_api/cart_products&key=1234";
             ServerComm.RestService re = new ServerComm.RestService();
             response = re.doGet(cartUrl);
 

@@ -148,13 +148,10 @@ public class ProductDetailActivity extends Activity {
             } catch (Exception e) {
 
             }
-
-
-
-
-            String ip = getString(R.string.server_ip);
+            mangoGlobals mg = mangoGlobals.getInstance();
+            String server_ip = mg.server_ip;
             //url_new = "http://"+ ip +"/opencart/image/data/demo/chicken_numchow.jpeg";
-            url_new = "http://"+ ip +"/opencart/image/" + img;
+            url_new = "http://"+ server_ip +"/opencart/image/" + img;
             urls.add(url_new);
 
             for (String url_to_open : urls) {
@@ -207,8 +204,9 @@ public class ProductDetailActivity extends Activity {
             String url_new = null, ver = null;
             int version = 0;
 
-            String ip = getString(R.string.server_ip);
-            url_new = "http://"+ ip +"/opencart/?route=feed/rest_api/product&id="+ arg[0] +"&key=1234";
+            mangoGlobals mg = mangoGlobals.getInstance();
+            String server_ip = mg.server_ip;
+            url_new = "http://"+ server_ip +"/opencart/?route=feed/rest_api/product&id="+ arg[0] +"&key=1234";
 
             Log.i("PRODDET prod_id is", arg[0] + "");
             ServerComm.RestService re = new ServerComm.RestService();
@@ -250,8 +248,9 @@ public class ProductDetailActivity extends Activity {
             String url_new = null, ver = null;
             int version = 0;
 
-            String ip = getString(R.string.server_ip);
-            url_new = "http://"+ ip +"/opencart/?route=feed/rest_api/cart_add&product_id="+ arg[0] +"&key=1234"; // add count
+            mangoGlobals mg = mangoGlobals.getInstance();
+            String server_ip = mg.server_ip;
+            url_new = "http://"+ server_ip +"/opencart/?route=feed/rest_api/cart_add&product_id="+ arg[0] +"&key=1234"; // add count
 
             Log.i("PRODDET prod_id is", arg[0] + "");
             ServerComm.RestService re = new ServerComm.RestService();
