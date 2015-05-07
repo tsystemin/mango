@@ -70,7 +70,10 @@ public class ViewCartActivity extends Activity {
             //String ip = getString(R.string.server_ip);
             String cartUrl = "http://"+ server_ip +"/opencart/?route=feed/rest_api/cart_products&key=1234";
             ServerComm.RestService re = new ServerComm.RestService();
-            response = re.doGet(cartUrl);
+            mangoGlobals mg = mangoGlobals.getInstance();
+            String name = mg.cname;
+            String val = mg.cval;
+            response = re.doGet(cartUrl, name, val);
 
             return response;
         }

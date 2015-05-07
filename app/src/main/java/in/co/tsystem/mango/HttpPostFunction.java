@@ -3,7 +3,11 @@ package in.co.tsystem.mango;
 /**
  * Created by diganta.paladhi on 05/04/15.
  */
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
+import android.webkit.CookieManager;
+
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -15,6 +19,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.UnsupportedEncodingException;
+import java.net.CookiePolicy;
+import java.net.HttpCookie;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,7 +28,10 @@ import java.util.List;
 
 public class HttpPostFunction {
 
-    public  HttpResponse  processPost(String uri, JSONObject req)  throws UnsupportedEncodingException {
+    public String ck_name;
+    public String ck_val;
+
+    public  HttpResponse  processPost(String uri, JSONObject req, String cookie_name, String cookie_value)  throws UnsupportedEncodingException {
         HttpResponse response = null;
 
         // Add your data
@@ -38,6 +47,10 @@ public class HttpPostFunction {
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(uri);
 
+            if ((cookie_name.toString().length() != 0) && (cookie_value.toString().length() != 0)) {
+                httppost.addHeader("Cookie ",cookie_name+"="+cookie_value+";");
+            }
+
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
             // Execute HTTP Post Request
@@ -48,6 +61,15 @@ public class HttpPostFunction {
             Log.d("Post Status","Code: " + result.toString());
             if (result.toString().length() != 0) {
                 //SaveSharedPreference.setCookie(mContext, result.toString());
+                String cookie_str = result.toString();
+                String cookie_elements[];
+                String cookie_val[];
+                cookie_elements = cookie_str.split("=");
+                Log.d("COOKIE name", "" + cookie_elements[1]);
+                cookie_val = cookie_elements[2].split("\\}");
+                Log.d("COOKIE val", "" + cookie_val[0]);
+                ck_name = cookie_elements[1];
+                ck_val = cookie_val[0];
             }
 
             return response;

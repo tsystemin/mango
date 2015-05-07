@@ -266,7 +266,9 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
             String server_ip = mg.server_ip;
             url_new = "http://"+ server_ip +"/opencart/?route=feed/rest_api/categories&key=1234";
             ServerComm.RestService re = new ServerComm.RestService();
-            jb = re.doGet(url_new);
+            String name = mg.cname;
+            String val = mg.cval;
+            jb = re.doGet(url_new, name, val);
             try {
                 ret = jb.getString("success");
 

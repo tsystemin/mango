@@ -23,7 +23,8 @@ import java.util.List;
 public class SaveSharedPreference {
     static final String PREF_USER_NAME = "u";
     static final String PREF_PASS = "p";
-    static final String PREF_COOKIE = "c";
+    static final String PREF_COOKIE_NAME = "c";
+    static final String PREF_COOKIE_VAL = "0";
 
     static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -43,10 +44,17 @@ public class SaveSharedPreference {
         editor.commit();
     }
 
-    public static void setCookie(Context ctx, String cookie)
+    public static void setCookieName(Context ctx, String cookie)
     {
         SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
-        editor.putString(PREF_COOKIE, cookie);
+        editor.putString(PREF_COOKIE_NAME, cookie);
+        editor.commit();
+    }
+
+    public static void setCookieVal(Context ctx, String cookie)
+    {
+        SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
+        editor.putString(PREF_COOKIE_VAL, cookie);
         editor.commit();
     }
 
@@ -60,9 +68,14 @@ public class SaveSharedPreference {
         return getSharedPreferences(ctx).getString(PREF_PASS, "");
     }
 
-    public static String getCookie(Context ctx)
+    public static String getCookieName(Context ctx)
     {
-        return getSharedPreferences(ctx).getString(PREF_COOKIE, "");
+        return getSharedPreferences(ctx).getString(PREF_COOKIE_NAME, "");
+    }
+
+    public static String getCookieVal(Context ctx)
+    {
+        return getSharedPreferences(ctx).getString(PREF_COOKIE_VAL, "");
     }
 
     public static void clearCred(Context ctx)

@@ -14,6 +14,7 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 
@@ -178,7 +179,7 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
         String postData = "{'email' : " + email + ", 'password' : " + password + "}";
 
         try {
-            silentLoginAsyncTask tsk = new silentLoginAsyncTask();
+            silentLoginAsyncTask tsk = new silentLoginAsyncTask(GcLoginActivity.this);
             tsk.execute(registerUri, postData);
         } catch (Throwable t) {
             t.printStackTrace();
@@ -353,7 +354,23 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
             try {
                 obj = new JSONObject(arg0[1]);
                 HttpPostFunction sChannel = new HttpPostFunction();
-                response = sChannel.processPost(arg0[0], obj);
+                response = sChannel.processPost(arg0[0], obj, "", "");
+
+                Log.d("COOKIE rcvd" , "name =" + sChannel.ck_name);
+                Log.d("COOKIE rcvd" , "val =" + sChannel.ck_val);
+
+                // save cookie
+                //SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+                //editor.putString("cookie_name", sChannel.ck_name);
+                //editor.putString("cookie_val", sChannel.ck_val);
+                //editor.apply();
+
+                //SaveSharedPreference.setCookieName(mContext, sChannel.ck_name);
+                //SaveSharedPreference.setCookieVal(mContext, sChannel.ck_val);
+
+                mangoGlobals mg = mangoGlobals.getInstance();
+                mg.cname = sChannel.ck_name;
+                mg.cval = sChannel.ck_val;
 
                 Thread.sleep(2000);
             } catch (Exception e) {
@@ -365,6 +382,12 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
     }
 
     private class silentLoginAsyncTask extends AsyncTask<String, Void, HttpResponse> {
+
+        private Context mContext;
+        public silentLoginAsyncTask(Context context) {
+            mContext = context;
+        }
+
         @Override
         protected void onPostExecute(HttpResponse result) {
             super.onPostExecute(result);
@@ -382,7 +405,23 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
             try {
                 obj = new JSONObject(arg0[1]);
                 HttpPostFunction sChannel = new HttpPostFunction();
-                response = sChannel.processPost(arg0[0], obj);
+                response = sChannel.processPost(arg0[0], obj, "", "");
+
+                Log.d("COOKIE silent rcvd" , "name =" + sChannel.ck_name);
+                Log.d("COOKIE silent rcvd" , "val =" + sChannel.ck_val);
+
+                // save cookie
+                //SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+                //editor.putString("cookie_name", sChannel.ck_name);
+                //editor.putString("cookie_val", sChannel.ck_val);
+                //editor.apply();
+
+                //SaveSharedPreference.setCookieName(mContext, sChannel.ck_name);
+                //SaveSharedPreference.setCookieVal(mContext, sChannel.ck_val);
+
+                mangoGlobals mg = mangoGlobals.getInstance();
+                mg.cname = sChannel.ck_name;
+                mg.cval = sChannel.ck_val;
 
                 Thread.sleep(2000);
             } catch (Exception e) {

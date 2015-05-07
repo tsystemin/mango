@@ -3,6 +3,8 @@ package in.co.tsystem.mango;
 /**
  * Created by diganta.paladhi on 20/04/15.
  */
+import android.util.Log;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -22,7 +24,7 @@ public class ServerComm {
 
     public static class RestService {
 
-        public JSONObject doGet(String url) {
+        public JSONObject doGet(String url, String cookie_name, String cookie_value) {
             //JSONObject json = null;
 
             HttpClient httpclient = new DefaultHttpClient();
@@ -30,6 +32,10 @@ public class ServerComm {
             HttpGet httpget = new HttpGet(url);
             // Accept JSON
             httpget.addHeader("accept", "application/json");
+            if ((cookie_name.toString().length() != 0) && (cookie_value.toString().length() != 0)) {
+                Log.d("SERVERCOM", "add header");
+                httpget.addHeader("Set-Cookie", cookie_name + "=" + cookie_value + ";");
+            }
             // Execute the request
             HttpResponse response;
 

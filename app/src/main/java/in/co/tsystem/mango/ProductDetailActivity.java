@@ -3,6 +3,7 @@ package in.co.tsystem.mango;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -210,7 +211,9 @@ public class ProductDetailActivity extends Activity {
 
             Log.i("PRODDET prod_id is", arg[0] + "");
             ServerComm.RestService re = new ServerComm.RestService();
-            jb = re.doGet(url_new);
+            String name = mg.cname;
+            String val = mg.cval;
+            jb = re.doGet(url_new, name, val);
             try {
                 //ver = jb.getString("db_ver");
                 //version = Integer.parseInt(ver);
@@ -254,7 +257,24 @@ public class ProductDetailActivity extends Activity {
 
             Log.i("PRODDET prod_id is", arg[0] + "");
             ServerComm.RestService re = new ServerComm.RestService();
-            jb = re.doGet(url_new);
+
+            // get cookie info
+            //SharedPreferences settings = mContext.getSharedPreferences("PREFS_NAME", 0);
+            //String name = settings.getString("cookie_name", "");
+            //String val = settings.getString("cookie_val", "");
+
+            //SaveSharedPreference p = SaveSharedPreference.getSharedPreferences(mContext);
+            //String name = SaveSharedPreference.getCookieName(mContext);
+            //String val = SaveSharedPreference.getCookieVal(mContext);
+
+
+            String name = mg.cname;
+            String val = mg.cval;
+
+            Log.d(" CART ADD cookie name" , name + "");
+            Log.d(" CART ADD cookie val", val + "" );
+
+            jb = re.doGet(url_new, name, val);
             try {
                 //ver = jb.getString("db_ver");
                 //version = Integer.parseInt(ver);

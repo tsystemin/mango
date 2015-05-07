@@ -11,6 +11,7 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -337,7 +338,7 @@ public class GcRegisterActivity extends Activity implements LoaderManager.Loader
     private class myRegAsyncTask extends AsyncTask<String, Void, HttpResponse> {
 
 
-
+        HttpPostFunction sChannel;
         private Context mContext;
         public myRegAsyncTask(Context context) {
             mContext = context;
@@ -370,6 +371,19 @@ public class GcRegisterActivity extends Activity implements LoaderManager.Loader
                 Log.d("ASYNC_CATCH", aJsonString);
 
                 if (aJsonString.equals("TRUE")) {
+                    // save cookie
+                    //SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+                    //editor.putString("cookie_name", sChannel.ck_name);
+                    //editor.putString("cookie_val", sChannel.ck_val);
+                    //editor.apply();
+
+                    //SaveSharedPreference.setCookieName(mContext, sChannel.ck_name);
+                    //SaveSharedPreference.setCookieVal(mContext, sChannel.ck_val);
+
+                    mangoGlobals mg = mangoGlobals.getInstance();
+                    mg.cname = sChannel.ck_name;
+                    mg.cval = sChannel.ck_val;
+
                     SaveSharedPreference.setUserName(mContext, USER_NAME);
                     SaveSharedPreference.setPassword(mContext, PASS);
                     Intent intent = new Intent(mContext, CategoryActivity.class);
@@ -404,8 +418,8 @@ public class GcRegisterActivity extends Activity implements LoaderManager.Loader
             JSONObject obj;
             try {
                 obj = new JSONObject(arg0[1]);
-                HttpPostFunction sChannel = new HttpPostFunction();
-                response = sChannel.processPost(arg0[0], obj);
+                sChannel = new HttpPostFunction();
+                response = sChannel.processPost(arg0[0], obj, "", "");
                 Thread.sleep(2000);
             } catch (IOException e) {
                 e.printStackTrace();
