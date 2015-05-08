@@ -131,6 +131,17 @@ public class ViewCartActivity extends Activity {
                 ListViewAdapter adapter=new ListViewAdapter(ViewCartActivity.this, list_prod);
                 listview1.setAdapter(adapter);
 
+                Button b = (Button)findViewById(R.id.check_out);
+                b.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v)
+                    {
+                        //DO SOMETHING! {RUN SOME FUNCTION ... DO CHECKS... ETC}
+                        checkOutFromStore chkout_tsk = new checkOutFromStore(mContext);
+                        chkout_tsk.execute();
+
+                    }
+                });
+
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -151,6 +162,69 @@ public class ViewCartActivity extends Activity {
             String val = mg.cval;
 
             return re.doGet(cartUrl, name, val);
+        }
+    }
+
+
+    private class checkOutFromStore extends AsyncTask< Void, Void, JSONObject > {
+
+        JSONObject jb;
+        private Context mContext;
+        BufferedReader br;
+
+        public checkOutFromStore(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject result) {
+            super.onPostExecute(result);
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected JSONObject doInBackground(Void... arg) {
+
+            String url_new = null, ver = null;
+            int version = 0;
+
+            mangoGlobals mg = mangoGlobals.getInstance();
+            String server_ip = mg.server_ip;
+            url_new = "http://"+ server_ip +"/opencart/?route=feed/rest_api/checkout&payment_method=cod&shipping_method=flat.flat&key=1234"; // add count
+
+            //Log.i("PRODDET prod_id is", arg[0] + "");
+            ServerComm.RestService re = new ServerComm.RestService();
+
+            // get cookie info
+            //SharedPreferences settings = mContext.getSharedPreferences("PREFS_NAME", 0);
+            //String name = settings.getString("cookie_name", "");
+            //String val = settings.getString("cookie_val", "");
+
+            //SaveSharedPreference p = SaveSharedPreference.getSharedPreferences(mContext);
+            //String name = SaveSharedPreference.getCookieName(mContext);
+            //String val = SaveSharedPreference.getCookieVal(mContext);
+
+
+            String name = mg.cname;
+            String val = mg.cval;
+
+            Log.d(" CART ADD cookie name" , name + "");
+            Log.d(" CART ADD cookie val", val + "" );
+
+            jb = re.doGet(url_new, name, val);
+            try {
+                //ver = jb.getString("db_ver");
+                //version = Integer.parseInt(ver);
+                Log.i("PRODDET", jb.toString() + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return jb;
         }
     }
 }
