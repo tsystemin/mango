@@ -14,7 +14,6 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 
@@ -23,7 +22,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,7 +31,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.apache.http.HttpEntity;
@@ -43,7 +40,6 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +52,7 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    //private UserLoginTask mAuthTask = null;
+    mangoGlobals mg = mangoGlobals.getInstance();
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -130,13 +126,6 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
-        /*if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }*/
-
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
@@ -145,6 +134,13 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
         } else if (!isEmailValid(email)) {
            mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
+            cancel = true;
+        }
+
+        // Check for empty password
+        if (TextUtils.isEmpty(password)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mPasswordView;
             cancel = true;
         }
 
@@ -158,28 +154,26 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
             if (mLoginFormView != null) {
                 showProgress(true);
             }
-            mangoGlobals mg = mangoGlobals.getInstance();
-            String server_ip = mg.server_ip;
-            String registerUri = "http://"+ server_ip +"/opencart/index.php?route=feed/rest_api/customerLogin&key=1234";
+
+            String registerUri = "http://"+ mg.server_ip +"/opencart/index.php?route=feed/rest_api/customerLogin";
             String postData = "{'email' : " + email + ", 'password' : " + password + "}";
 
             try {
                 myLoginAsyncTask tsk = new myLoginAsyncTask(this);
                 tsk.execute(registerUri, postData);
             } catch (Throwable t) {
-                Log.e("My App", "Could not : " + t);
+                t.printStackTrace();
             }
         }
     }
 
     public void silentLogin(String email, String password) {
-        mangoGlobals mg = mangoGlobals.getInstance();
-        String server_ip = mg.server_ip;
-        String registerUri = "http://"+ server_ip +"/opencart/index.php?route=feed/rest_api/customerLogin&key=1234";
+        mangoGlobals mgg = mangoGlobals.getInstance();
+        String registerUri = "http://"+ mgg.server_ip +"/opencart/index.php?route=feed/rest_api/customerLogin";
         String postData = "{'email' : " + email + ", 'password' : " + password + "}";
 
         try {
-            silentLoginAsyncTask tsk = new silentLoginAsyncTask(GcLoginActivity.this);
+            silentLoginAsyncTask tsk = new silentLoginAsyncTask();
             tsk.execute(registerUri, postData);
         } catch (Throwable t) {
             t.printStackTrace();
@@ -337,8 +331,7 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
                             .show();
                 }
             } catch (Exception e) {
-                // Oops
-                Log.d("ASYNC_CATCH", "out....");
+                e.printStackTrace();
             }
         }
 
@@ -356,18 +349,6 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
                 HttpPostFunction sChannel = new HttpPostFunction();
                 response = sChannel.processPost(arg0[0], obj, "", "");
 
-                Log.d("COOKIE rcvd" , "name =" + sChannel.ck_name);
-                Log.d("COOKIE rcvd" , "val =" + sChannel.ck_val);
-
-                // save cookie
-                //SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
-                //editor.putString("cookie_name", sChannel.ck_name);
-                //editor.putString("cookie_val", sChannel.ck_val);
-                //editor.apply();
-
-                //SaveSharedPreference.setCookieName(mContext, sChannel.ck_name);
-                //SaveSharedPreference.setCookieVal(mContext, sChannel.ck_val);
-
                 mangoGlobals mg = mangoGlobals.getInstance();
                 mg.cname = sChannel.ck_name;
                 mg.cval = sChannel.ck_val;
@@ -382,11 +363,6 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
     }
 
     private class silentLoginAsyncTask extends AsyncTask<String, Void, HttpResponse> {
-
-        private Context mContext;
-        public silentLoginAsyncTask(Context context) {
-            mContext = context;
-        }
 
         @Override
         protected void onPostExecute(HttpResponse result) {
@@ -406,18 +382,6 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
                 obj = new JSONObject(arg0[1]);
                 HttpPostFunction sChannel = new HttpPostFunction();
                 response = sChannel.processPost(arg0[0], obj, "", "");
-
-                Log.d("COOKIE silent rcvd" , "name =" + sChannel.ck_name);
-                Log.d("COOKIE silent rcvd" , "val =" + sChannel.ck_val);
-
-                // save cookie
-                //SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
-                //editor.putString("cookie_name", sChannel.ck_name);
-                //editor.putString("cookie_val", sChannel.ck_val);
-                //editor.apply();
-
-                //SaveSharedPreference.setCookieName(mContext, sChannel.ck_name);
-                //SaveSharedPreference.setCookieVal(mContext, sChannel.ck_val);
 
                 mangoGlobals mg = mangoGlobals.getInstance();
                 mg.cname = sChannel.ck_name;

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +15,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import org.apache.http.HttpResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -31,13 +30,11 @@ import java.util.List;
 
 
 public class CategoryActivity extends ActionBarActivity implements View.OnClickListener {
-    private GridViewAdapter ga;
-    //myAsyncTask tsk;
     getCategories parent_tsk;
-    int newCatDbVer = 0;
     ImageView cart;
 
     Boolean doubleBackToExitPressedOnce = false;
+    mangoGlobals mg = mangoGlobals.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,11 +77,12 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
-            //super.onBackPressed();
+            // Logout from the app
+            logout();
+
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
-
             startActivity(intent);
             return;
         }
@@ -128,7 +126,6 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
             // need to traverse database and get length
             // may be populate an array
             return icons.length;
-            //return 0;
         }
 
         @Override
@@ -152,8 +149,7 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
             } else {
                 imageView = (ImageView) convertView;
             }
-            //imageView.setImageResource(icons[position]);
-            //imageView.setImageBitmap(dbHelper.getBitmap(position + 1));
+
             return imageView;
         }
 
@@ -204,29 +200,17 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
             JSONObject item;
             String cat_name;
             Integer cat_id;
-
-            TextView tv;
-
-            //tv = (TextView)findViewById(R.id.textView1);
             final ListView listview = (ListView) findViewById(R.id.listView1);
-            //arr = jb.getJSONArray('categories');
             final ArrayList<String> list = new ArrayList<String>();
 
-
-
             try {
-                categories = jb.getJSONArray("categories");
+                categories = result.getJSONArray("categories");
                 for (int i = 0; i < categories.length(); i++) {
                     item = categories.getJSONObject(i);
                     cat_name  = item.getString("name");
                     cat_id = item.getInt("category_id");
                     list.add(cat_name);
                     ProdIdMap.put(cat_name, cat_id);
-
-                    //Log.d("Type", shop.getString(i););
-                    //tv.setText(url_new);
-                    //tv.append(cat_name + "\n");
-                    Log.d("JSONPARSE cat %s", cat_name + "");
                 }
                 final StableArrayAdapter adapter = new StableArrayAdapter(mContext, android.R.layout.simple_list_item_1, list);
                 listview.setAdapter(adapter);
@@ -237,8 +221,8 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
                     public void onItemClick(AdapterView<?> parent, final View view,
                                             int position, long id) {
                         final String item = (String) parent.getItemAtPosition(position);
-
                         Integer idprod = ProdIdMap.get(item);
+
                         Intent intent = new Intent(mContext, ProductListActivity.class);
                         intent.putExtra("category_id", idprod);
                         startActivity(intent);
@@ -258,31 +242,59 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
 
         @Override
         protected JSONObject doInBackground(Void... arg0) {
-
-            String url_new = null, ret = null;
-            int version = 0;
-
-            mangoGlobals mg = mangoGlobals.getInstance();
-            String server_ip = mg.server_ip;
-            url_new = "http://"+ server_ip +"/opencart/?route=feed/rest_api/categories&key=1234";
+            String url_new = "http://"+ mg.server_ip +"/opencart/?route=feed/rest_api/categories&key=1234";
             ServerComm.RestService re = new ServerComm.RestService();
             String name = mg.cname;
             String val = mg.cval;
-            jb = re.doGet(url_new, name, val);
-            try {
-                ret = jb.getString("success");
 
-                Log.i("JSONPARSE return is %s", ret + "");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return jb;
+            return re.doGet(url_new, name, val);
         }
     }
 
     public void view_cart(View view) {
         Intent intent = new Intent(this, ViewCartActivity.class);
         startActivity(intent);
+    }
+
+    public void logout() {
+        String logoutUri = "http://"+ mg.server_ip +"/opencart/index.php?route=feed/rest_api/customerLogout";
+        String postData = "{'email' : dummy}";
+
+        try {
+            logOut tsk = new logOut();
+            tsk.execute(logoutUri, postData);
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+    }
+
+    private class logOut extends AsyncTask<String, Void, HttpResponse> {
+
+        @Override
+        protected void onPostExecute(HttpResponse result) {
+            super.onPostExecute(result);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected HttpResponse doInBackground(String... arg0) {
+            HttpResponse response = null;
+            try {
+                JSONObject obj = new JSONObject(arg0[1]);
+                HttpPostFunction sChannel = new HttpPostFunction();
+                response = sChannel.processPost(arg0[0], obj, "", "");
+
+                Thread.sleep(2000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return response;
+        }
     }
 
 }
