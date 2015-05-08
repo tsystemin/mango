@@ -4,6 +4,8 @@ package in.co.tsystem.mango;
  * Created by diganta.paladhi on 20/04/15.
  */
 
+import android.util.Log;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -23,8 +25,7 @@ public class ServerComm {
 
     public static class RestService {
 
-        public JSONObject doGet(String url, String cookie_name, String cookie_value) {
-            //JSONObject json = null;
+        public JSONObject doGet(String url) {
 
             HttpClient httpclient = new DefaultHttpClient();
             // Prepare a request object
@@ -34,8 +35,8 @@ public class ServerComm {
             httpget.addHeader("accept", "application/json");
 
             // Use the cookie if available
-            if ((cookie_name.toString().length() != 0) && (cookie_value.toString().length() != 0)) {
-                httpget.addHeader("Cookie", cookie_name + "=" + cookie_value + ";");
+            if ((mangoGlobals.cname != null) && (mangoGlobals.cval != null)) {
+                httpget.addHeader("Cookie", mangoGlobals.cname + "=" + mangoGlobals.cval + ";");
             }
             // Execute the request
             HttpResponse response;

@@ -6,7 +6,7 @@ import android.app.Application;
  * Created by diganta.paladhi on 06/05/15.
  */
 public class mangoGlobals extends Application {
-    public static String server_ip = "10.0.0.118";
+    public static String server_ip = "10.1.34.43";
     public static String cname;
     public static String cval;
     private static mangoGlobals singleInstance = null;

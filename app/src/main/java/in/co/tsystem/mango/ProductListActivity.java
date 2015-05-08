@@ -207,11 +207,8 @@ public class ProductListActivity extends Activity {
             //String ip = getString(R.string.server_ip);
             url_new = "http://"+ server_ip +"/opencart/?route=feed/rest_api/products&category="+cat_id+"&key=1234";
             ServerComm.RestService re = new ServerComm.RestService();
-            mangoGlobals mg = mangoGlobals.getInstance();
-            String name = mg.cname;
-            String val = mg.cval;
 
-            jb = re.doGet(url_new, name, val);
+            jb = re.doGet(url_new);
             try {
                 ret = jb.getString("success");
 

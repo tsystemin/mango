@@ -4,6 +4,8 @@ package in.co.tsystem.mango;
  * Created by diganta.paladhi on 05/04/15.
  */
 
+import android.util.Log;
+
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -21,10 +23,7 @@ import java.util.List;
 
 public class HttpPostFunction {
 
-    public String ck_name;
-    public String ck_val;
-
-    public  HttpResponse  processPost(String uri, JSONObject req, String cookie_name, String cookie_value)  throws UnsupportedEncodingException {
+    public  HttpResponse  processPost(String uri, JSONObject req)  throws UnsupportedEncodingException {
         HttpResponse response = null;
 
         // Add your data
@@ -42,8 +41,8 @@ public class HttpPostFunction {
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(uri);
 
-            if ((cookie_name.toString().length() != 0) && (cookie_value.toString().length() != 0)) {
-                httppost.addHeader("Cookie", cookie_name + "=" + cookie_value + ";");
+            if ((mangoGlobals.cname != null) && (mangoGlobals.cval != null)) {
+                httppost.addHeader("Cookie", mangoGlobals.cname + "=" + mangoGlobals.cval + ";");
             }
 
             if (req.keys() != null) {
@@ -52,6 +51,7 @@ public class HttpPostFunction {
 
             // Execute HTTP Post Request
             response = httpclient.execute(httppost);
+
             Header[] headers = response.getAllHeaders();
             HashMap result = convertHeadersToHashMap(headers);
 
@@ -61,8 +61,8 @@ public class HttpPostFunction {
                 String cookie_val[];
                 cookie_elements = cookie_str.split("=");
                 cookie_val = cookie_elements[2].split("\\}");
-                ck_name = cookie_elements[1];
-                ck_val = cookie_val[0];
+                mangoGlobals.cname = cookie_elements[1];
+                mangoGlobals.cval = cookie_val[0];
             }
 
             return response;

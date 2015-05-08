@@ -32,8 +32,6 @@
         android:layout_height="50sp"
         android:text="CheckOut"
         android:textColor="#ffffff"
-
-
         android:background="@drawable/home_page_button_style"
         android:clickable="true"
         android:layout_above="@+id/linearLayout1"
@@ -46,7 +44,6 @@
         android:layout_height="50sp"
         android:text="Clear Cart"
         android:textColor="#ffffff"
-
         android:background="@drawable/home_page_button_style"
         android:clickable="true"
         android:layout_above="@+id/linearLayout1"

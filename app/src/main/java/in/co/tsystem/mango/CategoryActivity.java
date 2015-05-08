@@ -84,6 +84,7 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
             intent.setAction(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
             startActivity(intent);
+
             return;
         }
 
@@ -157,8 +158,6 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
     }
 
     private class getCategories extends AsyncTask< Void, Void, JSONObject > {
-
-        JSONObject jb;
         private Context mContext;
         BufferedReader br;
         HashMap<String, Integer> ProdIdMap = new HashMap<String, Integer>();
@@ -178,6 +177,7 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
             @Override
             public long getItemId(int position) {
                 String item = getItem(position);
+
                 return mIdMap.get(item);
             }
 
@@ -243,11 +243,9 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
         @Override
         protected JSONObject doInBackground(Void... arg0) {
             String url_new = "http://"+ mg.server_ip +"/opencart/?route=feed/rest_api/categories&key=1234";
-            ServerComm.RestService re = new ServerComm.RestService();
-            String name = mg.cname;
-            String val = mg.cval;
 
-            return re.doGet(url_new, name, val);
+            ServerComm.RestService re = new ServerComm.RestService();
+            return re.doGet(url_new);
         }
     }
 
@@ -266,6 +264,9 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
         } catch (Throwable t) {
             t.printStackTrace();
         }
+
+        mg.cname = null;
+        mg.cval = null;
     }
 
     private class logOut extends AsyncTask<String, Void, HttpResponse> {
@@ -286,7 +287,7 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
             try {
                 JSONObject obj = new JSONObject(arg0[1]);
                 HttpPostFunction sChannel = new HttpPostFunction();
-                response = sChannel.processPost(arg0[0], obj, "", "");
+                response = sChannel.processPost(arg0[0], obj);
 
                 Thread.sleep(2000);
             } catch (Exception e) {

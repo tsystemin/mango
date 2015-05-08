@@ -371,19 +371,6 @@ public class GcRegisterActivity extends Activity implements LoaderManager.Loader
                 Log.d("ASYNC_CATCH", aJsonString);
 
                 if (aJsonString.equals("TRUE")) {
-                    // save cookie
-                    //SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
-                    //editor.putString("cookie_name", sChannel.ck_name);
-                    //editor.putString("cookie_val", sChannel.ck_val);
-                    //editor.apply();
-
-                    //SaveSharedPreference.setCookieName(mContext, sChannel.ck_name);
-                    //SaveSharedPreference.setCookieVal(mContext, sChannel.ck_val);
-
-                    mangoGlobals mg = mangoGlobals.getInstance();
-                    mg.cname = sChannel.ck_name;
-                    mg.cval = sChannel.ck_val;
-
                     SaveSharedPreference.setUserName(mContext, USER_NAME);
                     SaveSharedPreference.setPassword(mContext, PASS);
                     Intent intent = new Intent(mContext, CategoryActivity.class);
@@ -403,7 +390,7 @@ public class GcRegisterActivity extends Activity implements LoaderManager.Loader
                 }
             } catch (Exception e) {
                 // Oops
-                Log.d("ASYNC_CATCH", "out....");
+                e.printStackTrace();
             }
         }
 
@@ -419,7 +406,7 @@ public class GcRegisterActivity extends Activity implements LoaderManager.Loader
             try {
                 obj = new JSONObject(arg0[1]);
                 sChannel = new HttpPostFunction();
-                response = sChannel.processPost(arg0[0], obj, "", "");
+                response = sChannel.processPost(arg0[0], obj);
                 Thread.sleep(2000);
             } catch (IOException e) {
                 e.printStackTrace();
