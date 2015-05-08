@@ -86,7 +86,7 @@ public class ProductDetailActivity extends Activity {
         @Override
         protected void onPostExecute(Bitmap result) {
             JSONObject prod;
-            String price, desc;
+            String price, desc, clear_desc;
             super.onPostExecute(result);
             ImageView im = (ImageView)findViewById(R.id.PimageView);
             im.setImageBitmap(result);
@@ -102,8 +102,10 @@ public class ProductDetailActivity extends Activity {
 
                 try {
                     desc = prod.getString("description");
+                    SanitizeString se = new SanitizeString(desc);
+                    clear_desc = se.mstring;
                     TextView tvd = (TextView)findViewById(R.id.PtextView);
-                    tvd.setText(desc);
+                    tvd.setText(clear_desc);
                 } catch (Exception e) {
                 }
             } catch (Exception e) {
