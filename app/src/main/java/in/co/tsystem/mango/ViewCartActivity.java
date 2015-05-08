@@ -92,22 +92,44 @@ public class ViewCartActivity extends Activity {
             JSONArray cart_items;
             JSONObject item;
             String prod_name;
+            String quantity;
+            String price;
+
             Integer prod_id;
             final ListView listview1 = (ListView) findViewById(R.id.listView1);
-            final ArrayList<String> list_prod = new ArrayList<String>();
+            //sankar final ArrayList<String> list_prod = new ArrayList<String>();
+            ArrayList<HashMap<String, String>> list_prod = new ArrayList<HashMap<String, String>>();
 
             try {
                 cart_items = result.getJSONArray("product");
                 for (int i = 0; i < cart_items.length(); i++) {
+
                     item = cart_items.getJSONObject(i);
                     prod_name  = item.getString("name");
                     prod_id = item.getInt("product_id");
+                    quantity = item.getString("quantity");
+                    price = item.getString("price");
+                    /*
                     list_prod.add(prod_name);
                     ProdIdMap.put(prod_name, prod_id);
+                    */
+
+                    HashMap<String,String> temp=new HashMap<String, String>();
+                    temp.put(mg.FIRST_COLUMN, prod_name);
+                    temp.put(mg.SECOND_COLUMN, prod_id.toString());
+                    temp.put(mg.THIRD_COLUMN, quantity);
+                    temp.put(mg.FOURTH_COLUMN, price);
+
+
+                    list_prod.add(temp);
+
                 }
 
-                final StableArrayAdapter adapter_prod = new StableArrayAdapter(mContext, android.R.layout.simple_list_item_1, list_prod);
-                listview1.setAdapter(adapter_prod);
+                //final StableArrayAdapter adapter_prod = new StableArrayAdapter(mContext, android.R.layout.simple_list_item_1, list_prod);
+                //listview1.setAdapter(adapter_prod);
+
+                ListViewAdapter adapter=new ListViewAdapter(ViewCartActivity.this, list_prod);
+                listview1.setAdapter(adapter);
 
 
             } catch (Exception e) {
