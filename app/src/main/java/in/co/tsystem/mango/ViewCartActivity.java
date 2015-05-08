@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.json.JSONArray;
@@ -32,7 +33,6 @@ import java.util.List;
 public class ViewCartActivity extends Activity {
     private JSONObject response;
     mangoGlobals mg = mangoGlobals.getInstance();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +142,17 @@ public class ViewCartActivity extends Activity {
                     }
                 });
 
+                Button b1 = (Button)findViewById(R.id.clear_cart);
+                b1.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v)
+                    {
+                        //DO SOMETHING! {RUN SOME FUNCTION ... DO CHECKS... ETC}
+                        cartClear c = new cartClear(mContext);
+                        c.execute();
+
+                    }
+                });
+
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -179,6 +190,23 @@ public class ViewCartActivity extends Activity {
         @Override
         protected void onPostExecute(JSONObject result) {
             super.onPostExecute(result);
+            String ret;
+
+            // we can optimize by clearing cart in server after checkout
+            try {
+                ret = result.getString("success");
+                if (ret.contains("PASS")) {
+                    cartClear cleartsk = new cartClear(mContext);
+                    cleartsk.execute();
+                } else {
+                    Log.d("CHECKOUT ERROR", "code" + ret);
+                    Toast.makeText(getApplicationContext(), ret,
+                            Toast.LENGTH_LONG).show();
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         }
 
@@ -196,6 +224,81 @@ public class ViewCartActivity extends Activity {
             mangoGlobals mg = mangoGlobals.getInstance();
             String server_ip = mg.server_ip;
             url_new = "http://"+ server_ip +"/opencart/?route=feed/rest_api/checkout&payment_method=cod&shipping_method=flat.flat&key=1234"; // add count
+
+            //Log.i("PRODDET prod_id is", arg[0] + "");
+            ServerComm.RestService re = new ServerComm.RestService();
+
+            // get cookie info
+            //SharedPreferences settings = mContext.getSharedPreferences("PREFS_NAME", 0);
+            //String name = settings.getString("cookie_name", "");
+            //String val = settings.getString("cookie_val", "");
+
+            //SaveSharedPreference p = SaveSharedPreference.getSharedPreferences(mContext);
+            //String name = SaveSharedPreference.getCookieName(mContext);
+            //String val = SaveSharedPreference.getCookieVal(mContext);
+
+
+            String name = mg.cname;
+            String val = mg.cval;
+
+            Log.d(" CART ADD cookie name" , name + "");
+            Log.d(" CART ADD cookie val", val + "" );
+
+            jb = re.doGet(url_new, name, val);
+            try {
+                //ver = jb.getString("db_ver");
+                //version = Integer.parseInt(ver);
+                Log.i("PRODDET", jb.toString() + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return jb;
+        }
+    }
+
+    private class cartClear extends AsyncTask< Void, Void, JSONObject > {
+
+        JSONObject jb;
+        private Context mContext;
+        BufferedReader br;
+
+        public cartClear(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject result) {
+            super.onPostExecute(result);
+            //clear the cart on APP
+
+            final ListView listview1 = (ListView) findViewById(R.id.listView1);
+            //sankar final ArrayList<String> list_prod = new ArrayList<String>();
+            ArrayList<HashMap<String, String>> list_prod = new ArrayList<HashMap<String, String>>();
+
+            try {
+                ListViewAdapter adapter = new ListViewAdapter(ViewCartActivity.this, list_prod);
+                listview1.setAdapter(adapter);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected JSONObject doInBackground(Void... arg) {
+
+            String url_new = null, ver = null;
+            int version = 0;
+
+            mangoGlobals mg = mangoGlobals.getInstance();
+            String server_ip = mg.server_ip;
+            url_new = "http://"+ server_ip +"/opencart/?route=feed/rest_api/cart_clear&key=1234"; // add count
 
             //Log.i("PRODDET prod_id is", arg[0] + "");
             ServerComm.RestService re = new ServerComm.RestService();
