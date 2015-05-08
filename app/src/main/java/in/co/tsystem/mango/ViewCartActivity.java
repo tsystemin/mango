@@ -1,6 +1,7 @@
 package in.co.tsystem.mango;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
@@ -10,25 +11,38 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import org.apache.http.HttpResponse;
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
 public class ViewCartActivity extends Activity {
     private JSONObject response;
-    String server_ip;
+    mangoGlobals mg = mangoGlobals.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        myViewCartAsyncTask tsk;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_cart);
 
         mangoGlobals mg = mangoGlobals.getInstance();
-        server_ip = mg.server_ip;
-
-        myViewCartAsyncTask tsk = new myViewCartAsyncTask();
+        tsk = new myViewCartAsyncTask(this);
         tsk.execute();
     }
 
@@ -36,28 +50,70 @@ public class ViewCartActivity extends Activity {
         //Intent intent = new Intent(this, CheckOutActivity.class);
         //startActivity(intent);
     }
-
-    // Async task to send login request in a separate thread
     private class myViewCartAsyncTask extends AsyncTask<Void, Void, JSONObject> {
+        JSONObject jb;
+        private Context mContext;
+        BufferedReader br;
+        HashMap<String, Integer> ProdIdMap = new HashMap<String, Integer>();
+
+        private class StableArrayAdapter extends ArrayAdapter<String> {
+
+            HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
+
+            public StableArrayAdapter(Context context, int textViewResourceId,
+                                      List<String> objects) {
+                super(context, textViewResourceId, objects);
+                for (int i = 0; i < objects.size(); ++i) {
+                    mIdMap.put(objects.get(i), i);
+                }
+            }
+
+            @Override
+            public long getItemId(int position) {
+                String item = getItem(position);
+                return mIdMap.get(item);
+            }
+
+            @Override
+            public boolean hasStableIds() {
+                return true;
+            }
+
+        }
+
+        public myViewCartAsyncTask(Context context) {
+            mContext = context;
+        }
 
         @Override
         protected void onPostExecute(JSONObject result) {
             super.onPostExecute(result);
-            Log.d("RESP", result.toString());
-            /*
-             Button mCheckOut = (Button) findViewById(R.id.check_out);
-        mCheckOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Call the check out function which invokes check out actvity
-                //checkOut();
+
+            JSONArray cart_items;
+            JSONObject item;
+            String prod_name;
+            Integer prod_id;
+            final ListView listview1 = (ListView) findViewById(R.id.listView1);
+            final ArrayList<String> list_prod = new ArrayList<String>();
+
+            try {
+                cart_items = result.getJSONArray("product");
+                for (int i = 0; i < cart_items.length(); i++) {
+                    item = cart_items.getJSONObject(i);
+                    prod_name  = item.getString("name");
+                    prod_id = item.getInt("product_id");
+                    list_prod.add(prod_name);
+                    ProdIdMap.put(prod_name, prod_id);
+                }
+
+                final StableArrayAdapter adapter_prod = new StableArrayAdapter(mContext, android.R.layout.simple_list_item_1, list_prod);
+                listview1.setAdapter(adapter_prod);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
-            if (response.optString("success") == "TRUE") {
-                //Intent intent = new Intent(this, CategoryActivity.class);
-                //startActivity(intent);
-                Log.d("CATEGORY", "Inflated cart");
-            }*/
+
         }
 
         @Override
@@ -67,16 +123,12 @@ public class ViewCartActivity extends Activity {
 
         @Override
         protected JSONObject doInBackground(Void... arg0) {
-            String cartUrl = "http://"+ server_ip +"/opencart/?route=feed/rest_api/cart_products";
-            mangoGlobals mg = mangoGlobals.getInstance();
+            String cartUrl = "http://"+ mg.server_ip +"/opencart/?route=feed/rest_api/cart_products&key=1234";
+            ServerComm.RestService re = new ServerComm.RestService();
             String name = mg.cname;
             String val = mg.cval;
 
-            ServerComm.RestService re = new ServerComm.RestService();
-            response = re.doGet(cartUrl, name, val);
-
-            return response;
+            return re.doGet(cartUrl, name, val);
         }
     }
-
 }
