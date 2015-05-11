@@ -1,14 +1,26 @@
 package in.co.tsystem.mango;
 
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -28,25 +40,40 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static in.co.tsystem.mango.R.drawable.ic_drawer;
+
 
 public class CategoryActivity extends ActionBarActivity implements View.OnClickListener {
     getCategories parent_tsk;
     ImageView cart;
+    String[] nav_array;
+    private CharSequence mTitle;
+    private boolean mUserLearnedDrawer = false;
+    private Integer avi_dummy = 0;
+    ActionBarDrawerToggle actionBarDrawerToggle;
+    private ListView mDrawerListView;
 
     Boolean doubleBackToExitPressedOnce = false;
     mangoGlobals mg = mangoGlobals.getInstance();
+
+    String[] drawer_array;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_category);
+        setContentView(R.layout.activity_category_navigation);
         String image_url = null;
+
+        Resources resource = getResources();
+        drawer_array = resource.getStringArray(R.array.nav_drawer_array);
 
         parent_tsk = new getCategories(this);
         parent_tsk.execute();
 
         // Add cart icon to the action bar
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowCustomEnabled(true);
 
@@ -57,6 +84,132 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
 
         cart = (ImageView) findViewById(R.id.imageView4);
         cart.setOnClickListener(this);
+
+        // navigation drawer new
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        mDrawerListView = (ListView) findViewById(R.id.NavList1);
+        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                onNavigationDrawerItemSelected(position);
+            }
+        });
+        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_activated_1,
+                android.R.id.text1,
+                new String[]{
+                        drawer_array[0],
+                        drawer_array[1],
+                        drawer_array[2],
+                        drawer_array[3],
+                        drawer_array[4],
+                        drawer_array[5],
+                        drawer_array[6],
+                        drawer_array[7]
+                }));
+
+        //android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                ic_drawer,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close
+        )
+        {
+            public void onDrawerClosed(View view)
+            {
+                super.onDrawerClosed(view);
+                invalidateOptionsMenu();
+                syncState();
+            }
+
+            public void onDrawerOpened(View drawerView)
+            {
+                super.onDrawerOpened(drawerView);
+                invalidateOptionsMenu();
+                syncState();
+            }
+        };
+
+        drawerLayout.setDrawerListener(actionBarDrawerToggle);
+
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+        actionBarDrawerToggle.syncState();
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        // Handle your other action bar items...
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    public void onNavigationDrawerItemSelected(int position) {
+        try {
+            switch (position) {
+                case 0:
+                    //Intent intent = new Intent(MainActivity.this, RamkrishnaMathandMission.class);
+                    //startActivity(intent);
+                    break;
+                case 1:
+                    //intent = new Intent(MainActivity.this, Vedanta.class);
+                    //startActivity(intent);
+                    break;
+                case 2:
+                    //intent = new Intent(MainActivity.this, Festival.class);
+                    //startActivity(intent);
+                    break;
+                case 3:
+                    //intent = new Intent(MainActivity.this, Ideology.class);
+                    //startActivity(intent);
+                    view_cart(null);
+                    break;
+                case 4:
+                    //intent = new Intent(MainActivity.this, SriRamakrishna.class);
+                    //startActivity(intent);
+                    break;
+                case 5:
+                    //intent = new Intent(MainActivity.this, SaradaDevi.class);
+                    //startActivity(intent);
+                    break;
+                case 6:
+                    //intent = new Intent(MainActivity.this, SwamiVivekananda.class);
+                    //startActivity(intent);
+                    break;
+                case 7:
+                    //intent = new Intent(MainActivity.this, Emblem.class);
+                    //startActivity(intent);
+                    break;
+                case 8:
+                    //intent = new Intent(MainActivity.this, BranchesActivity.class);
+                    //startActivity(intent);
+                    break;
+                case 9:
+                    //intent = new Intent(MainActivity.this, DonationPage.class);
+                    //startActivity(intent);
+                    break;
+                case 10:
+                    //intent = new Intent(MainActivity.this, ContactUs.class);
+                    //startActivity(intent);
+                    break;
+                default:
+                    break;
+            }
+        }
+        catch (Exception e) {
+            super.onStop();
+        }
 
     }
 
@@ -101,61 +254,6 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
     }
 
 
-    public class GridViewAdapter extends BaseAdapter {
-        private Context context;
-
-        public GridViewAdapter(Context context) {
-            this.context = context;
-        }
-
-        private int[] icons = {
-                android.R.drawable.btn_star_big_off,
-                android.R.drawable.btn_star_big_on,
-                android.R.drawable.alert_light_frame,
-                android.R.drawable.alert_dark_frame,
-                android.R.drawable.arrow_down_float,
-                android.R.drawable.gallery_thumb,
-                android.R.drawable.ic_dialog_map,
-                android.R.drawable.ic_popup_disk_full,
-                android.R.drawable.star_big_on,
-                android.R.drawable.star_big_off,
-                android.R.drawable.star_big_on
-        };
-
-        @Override
-        public int getCount() {
-            // need to traverse database and get length
-            // may be populate an array
-            return icons.length;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ImageView imageView;
-            if (convertView == null) {
-                imageView = new ImageView(context);
-                imageView.setLayoutParams(new GridView.LayoutParams(600,400));
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imageView.setPadding(10, 10, 10, 10);
-            } else {
-                imageView = (ImageView) convertView;
-            }
-
-            return imageView;
-        }
-
-
-    }
 
     private class getCategories extends AsyncTask< Void, Void, JSONObject > {
         private Context mContext;
@@ -297,6 +395,5 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
             return response;
         }
     }
-
 }
 
