@@ -2,25 +2,15 @@ package in.co.tsystem.mango;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -97,7 +87,6 @@ public class ViewCartActivity extends Activity {
 
             Integer prod_id;
             final ListView listview1 = (ListView) findViewById(R.id.listView1);
-            //sankar final ArrayList<String> list_prod = new ArrayList<String>();
             ArrayList<HashMap<String, String>> list_prod = new ArrayList<HashMap<String, String>>();
 
             try {
