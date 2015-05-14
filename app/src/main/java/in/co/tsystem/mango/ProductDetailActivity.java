@@ -112,13 +112,47 @@ public class ProductDetailActivity extends Activity {
 
             }
 
+
+
+            Button incb = (Button)findViewById(R.id.incbutton);
+            incb.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v)
+                {
+                    //DO SOMETHING! {RUN SOME FUNCTION ... DO CHECKS... ETC}
+                    TextView tv = (TextView)findViewById(R.id.quantity);
+                    CharSequence cnt = tv.getText();
+                    Integer c = Integer.parseInt(cnt.toString());
+                    c++;
+                    tv.setText(c.toString());
+                }
+            });
+
+            Button decb = (Button)findViewById(R.id.decbutton);
+            decb.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v)
+                {
+                    //DO SOMETHING! {RUN SOME FUNCTION ... DO CHECKS... ETC}
+                    TextView tv = (TextView)findViewById(R.id.quantity);
+                    CharSequence cnt = tv.getText();
+                    Integer c = Integer.parseInt(cnt.toString());
+                    if (c > 0) {
+                        c--;
+                        tv.setText(c.toString());
+                    }
+
+                }
+            });
+
             Button b = (Button)findViewById(R.id.Pbutton);
             b.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v)
                 {
+                    TextView tv = (TextView)findViewById(R.id.quantity);
+                    CharSequence cnt = tv.getText();
+                    Integer c = Integer.parseInt(cnt.toString());
                     //DO SOMETHING! {RUN SOME FUNCTION ... DO CHECKS... ETC}
                     addToCart cart_tsk = new addToCart(mContext);
-                    cart_tsk.execute(prod_id);
+                    cart_tsk.execute(prod_id, c);
 
                 }
             });
@@ -254,7 +288,7 @@ public class ProductDetailActivity extends Activity {
 
             mangoGlobals mg = mangoGlobals.getInstance();
             String server_ip = mg.server_ip;
-            url_new = "http://"+ server_ip +"/opencart/?route=feed/rest_api/cart_add&product_id="+ arg[0] +"&key=1234"; // add count
+            url_new = "http://"+ server_ip +"/opencart/?route=feed/rest_api/cart_add&product_id="+ arg[0] +"&quantity="+ arg[1] + "&key=1234"; // add count
 
             Log.i("PRODDET prod_id is", arg[0] + "");
             ServerComm.RestService re = new ServerComm.RestService();
