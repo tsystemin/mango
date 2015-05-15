@@ -211,6 +211,9 @@ public class MainActivity extends Activity implements View.OnClickListener,
     }
 
     @Override
+    public void onResume() { super.onResume(); }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
     }

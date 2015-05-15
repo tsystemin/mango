@@ -90,11 +90,13 @@
         </activity>
         <activity
             android:name=".ProductListActivity"
-            android:label="@string/title_activity_product_list" >
+            android:label="@string/title_activity_product_list"
+            android:theme="@style/Theme.AppCompat.Light" >
         </activity>
         <activity
             android:name=".ProductDetailActivity"
-            android:label="@string/title_activity_product_detail" >
+            android:label="@string/title_activity_product_detail"
+            android:theme="@style/Theme.AppCompat.Light" >
         </activity>
     </application>
 

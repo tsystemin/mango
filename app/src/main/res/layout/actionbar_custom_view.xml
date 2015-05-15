@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_gravity="fill_horizontal"
+    android:layout_height="match_parent" >
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/shoping_cart"
+        android:layout_marginRight="0dp"
+        android:src="@drawable/shopping_cart"
         android:clickable="true"
         android:onClick="view_cart" />
+    
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/hotlist_hot"
+        android:layout_width="wrap_content"
+        android:minWidth="20sp"
+        android:textSize="15sp"
+        android:textColor="#ffffffff"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="0"
+        android:layout_alignTop="@id/imageView4"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="47dp"
+        android:layout_marginTop="17dp"
+        android:paddingBottom="1dp"
+        android:paddingRight="4dp"
+        android:paddingLeft="4dp"
+        android:background="@drawable/rounded_square"/>
  </RelativeLayout>

@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -35,11 +39,12 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class ProductListActivity extends Activity {
+public class ProductListActivity extends ActionBarActivity implements View.OnClickListener{
 
     getProductList tsk;
     int cat_id = 0;
     String server_ip;
+    TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,15 @@ public class ProductListActivity extends Activity {
         mangoGlobals mg = mangoGlobals.getInstance();
         server_ip = mg.server_ip;
 
+        final ActionBar actionBar = getSupportActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.actionbar_custom_view, null);
+        actionBar.setCustomView(view, new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
+        //updateHotCount();
+
         Intent myIntent = getIntent();
         cat_id = myIntent.getIntExtra("category_id", 0);
 
@@ -56,15 +70,22 @@ public class ProductListActivity extends Activity {
         tsk.execute();
     }
 
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_product_list, menu);
-        return true;
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.hotlist_hot:
+                view_cart(view);
+                break;
+            default:
+                break;
+        }
     }
 
-    @Override
+    public void view_cart(View view) {
+        Intent intent = new Intent(this, ViewCartActivity.class);
+        startActivity(intent);
+    }
+
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -124,8 +145,6 @@ public class ProductListActivity extends Activity {
             String cat_name;
             Integer cat_id;
 
-            TextView tv;
-
             //tv = (TextView)findViewById(R.id.textView1);
             final ListView listview = (ListView) findViewById(R.id.prodlistView);
             //arr = jb.getJSONArray('categories');
@@ -141,11 +160,6 @@ public class ProductListActivity extends Activity {
                     cat_id = item.getInt("id");
                     list.add(cat_name);
                     ProdIdMap.put(cat_name, cat_id);
-
-                    //Log.d("Type", shop.getString(i););
-                    //tv.setText(url_new);
-                    //tv.append(cat_name + "\n");
-                    Log.d("JSONPARSE cat %s", cat_name + "");
                 }
                 final StableArrayAdapter adapter = new StableArrayAdapter(mContext, android.R.layout.simple_list_item_1, list);
                 listview.setAdapter(adapter);
@@ -203,9 +217,7 @@ public class ProductListActivity extends Activity {
             String url_new = null, ret = null;
             int version = 0;
 
-            //url_new = "http://10.0.0.103/opencart/?route=feed/rest_api/products&category=59&key=1234";
-            //String ip = getString(R.string.server_ip);
-            url_new = "http://"+ server_ip +"/opencart/?route=feed/rest_api/products&category="+cat_id+"&key=1234";
+            url_new = "http://"+ server_ip +"/opencart/?route=feed/rest_api/products&category="+cat_id;
             ServerComm.RestService re = new ServerComm.RestService();
 
             jb = re.doGet(url_new);

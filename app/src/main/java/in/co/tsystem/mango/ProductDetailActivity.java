@@ -7,12 +7,16 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
@@ -33,16 +37,30 @@ import java.net.URL;
 import java.util.ArrayList;
 
 
-public class ProductDetailActivity extends Activity {
+public class ProductDetailActivity extends ActionBarActivity implements View.OnClickListener {
 
     Integer prod_id;
     dnldProductDetails tsk;
     getImageNPopulateDate tsk2;
+    TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
+
+        final ActionBar actionBar = getSupportActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.actionbar_custom_view, null);
+        actionBar.setCustomView(view, new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
+        //updateHotCount();
+
+        tv = (TextView) findViewById(R.id.hotlist_hot);
+        tv.setOnClickListener(this);
+
         Intent myIntent = getIntent();
         prod_id = myIntent.getIntExtra("prod_id", 0);
 
@@ -52,12 +70,19 @@ public class ProductDetailActivity extends Activity {
 
     }
 
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.hotlist_hot:
+                view_cart(view);
+                break;
+            default:
+                break;
+        }
+    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_product_detail, menu);
-        return true;
+    public void view_cart(View view) {
+        Intent intent = new Intent(this, ViewCartActivity.class);
+        startActivity(intent);
     }
 
     @Override

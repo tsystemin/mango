@@ -1,34 +1,28 @@
 package in.co.tsystem.mango;
 
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
@@ -45,11 +39,7 @@ import static in.co.tsystem.mango.R.drawable.ic_drawer;
 
 public class CategoryActivity extends ActionBarActivity implements View.OnClickListener {
     getCategories parent_tsk;
-    ImageView cart;
-    String[] nav_array;
-    private CharSequence mTitle;
-    private boolean mUserLearnedDrawer = false;
-    private Integer avi_dummy = 0;
+    TextView tv;
     ActionBarDrawerToggle actionBarDrawerToggle;
     private ListView mDrawerListView;
 
@@ -66,24 +56,23 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
         setContentView(R.layout.activity_category_navigation);
         String image_url = null;
 
+        final ActionBar actionBar = getSupportActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.actionbar_custom_view, null);
+        actionBar.setCustomView(view, new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
+        //updateHotCount();
+
+        tv = (TextView) findViewById(R.id.hotlist_hot);
+        tv.setOnClickListener(this);
+
         Resources resource = getResources();
         drawer_array = resource.getStringArray(R.array.nav_drawer_array);
 
         parent_tsk = new getCategories(this);
         parent_tsk.execute();
-
-        // Add cart icon to the action bar
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowCustomEnabled(true);
-
-        LayoutInflater inflator = (LayoutInflater) this .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflator.inflate(R.layout.actionbar_custom_view, null);
-
-        actionBar.setCustomView(v);
-
-        cart = (ImageView) findViewById(R.id.imageView4);
-        cart.setOnClickListener(this);
 
         // navigation drawer new
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -132,6 +121,14 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
                 invalidateOptionsMenu();
                 syncState();
             }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float offset)
+            {
+                View container = findViewById(R.id.listView1);
+                container.setTranslationX(offset*drawerView.getWidth());
+            }
+
         };
 
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
@@ -142,18 +139,15 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Pass the event to ActionBarDrawerToggle, if it returns
-        // true, then it has handled the app icon touch event
-        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.hotlist_hot:
+                view_cart(view);
+                break;
+            default:
+                break;
         }
-        // Handle your other action bar items...
-
-        return super.onOptionsItemSelected(item);
     }
-
 
     public void onNavigationDrawerItemSelected(int position) {
         try {
@@ -213,15 +207,58 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
 
     }
 
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.imageView4:
-                view_cart(view);
-                break;
-            default:
-                break;
-        }
+    private int hot_number = 0;
+    private TextView ui_hot = null;
+
+    // call the updating code on the main thread,
+    // so we can call this asynchronously
+    public void updateHotCount(final int new_hot_number) {
+        hot_number = new_hot_number;
+        if (ui_hot == null) return;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ui_hot.setVisibility(View.VISIBLE);
+                ui_hot.setText(Integer.toString(new_hot_number));
+            }
+        });
     }
+
+    /* static abstract class MyMenuItemStuffListener implements View.OnClickListener, View.OnLongClickListener {
+        private String hint;
+        private View view;
+
+        MyMenuItemStuffListener(View view, String hint) {
+            this.view = view;
+            this.hint = hint;
+            view.setOnClickListener(this);
+            view.setOnLongClickListener(this);
+        }
+
+        @Override abstract public void onClick(View v);
+
+        @Override public boolean onLongClick(View v) {
+            final int[] screenPos = new int[2];
+            final Rect displayFrame = new Rect();
+            view.getLocationOnScreen(screenPos);
+            view.getWindowVisibleDisplayFrame(displayFrame);
+            final Context context = view.getContext();
+            final int width = view.getWidth();
+            final int height = view.getHeight();
+            final int midy = screenPos[1] + height / 2;
+            final int screenWidth = context.getResources().getDisplayMetrics().widthPixels;
+            Toast cheatSheet = Toast.makeText(context, hint, Toast.LENGTH_SHORT);
+            if (midy < displayFrame.height()) {
+                cheatSheet.setGravity(Gravity.TOP | Gravity.RIGHT,
+                        screenWidth - screenPos[0] - width / 2, height);
+            } else {
+                cheatSheet.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, height);
+            }
+            cheatSheet.show();
+            return true;
+        }
+    }*/
+
 
     /**
      * Back button listener.
