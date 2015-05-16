@@ -96,7 +96,8 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
                         drawer_array[4],
                         drawer_array[5],
                         drawer_array[6],
-                        drawer_array[7]
+                        drawer_array[7],
+                        drawer_array[8]
                 }));
 
         //android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
@@ -153,13 +154,11 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
         try {
             switch (position) {
                 case 0:
-                    //Intent intent = new Intent(MainActivity.this, RamkrishnaMathandMission.class);
-                    //startActivity(intent);
                     break;
                 case 1:
                     //intent = new Intent(MainActivity.this, Vedanta.class);
                     //startActivity(intent);
-                    break;
+
                 case 2:
                     //intent = new Intent(MainActivity.this, Festival.class);
                     //startActivity(intent);
@@ -188,6 +187,8 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
                 case 8:
                     //intent = new Intent(MainActivity.this, BranchesActivity.class);
                     //startActivity(intent);
+                    Intent intent = new Intent(this, CheckoutActivity.class);
+                    startActivity(intent);
                     break;
                 case 9:
                     //intent = new Intent(MainActivity.this, DonationPage.class);
