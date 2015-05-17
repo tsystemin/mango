@@ -106,7 +106,7 @@ public class ViewCartActivity extends Activity {
 
                     HashMap<String,String> temp=new HashMap<String, String>();
                     temp.put(mg.FIRST_COLUMN, prod_name);
-                    temp.put(mg.SECOND_COLUMN, prod_id.toString());
+                    //temp.put(mg.SECOND_COLUMN, prod_id.toString());
                     temp.put(mg.THIRD_COLUMN, quantity);
                     temp.put(mg.FOURTH_COLUMN, price);
 

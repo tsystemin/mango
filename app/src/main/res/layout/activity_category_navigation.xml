@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         tools:context="in.co.tsystem.mango.CategoryActivity"
         android:id="@+id/Relative1"
-        android:background="#ff2a3050">
+        android:background="#2164b2fa">
 
     <ListView
         android:layout_width="fill_parent"
@@ -22,9 +22,9 @@
         android:id="@+id/listView1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="#ff2a2f55"
+        android:background="#fabe19"
         android:divider="#ffffffff"
-        android:dividerHeight="1sp"
+        android:dividerHeight="2sp"
         android:drawSelectorOnTop="true" />
     </RelativeLayout>
 

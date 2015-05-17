@@ -3,28 +3,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="in.co.tsystem.gamechanger.ViewCartActivity"
-    android:background="#ff2a3050">
+    android:background="#ff37355c"
+    android:clickable="true">
 
+    <!--
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="22sp"
-        android:id="@+id/linearLayout1" >
+        android:id="@+id/linearLayout1"
+        android:background="#2164b2fa">
 
     </LinearLayout>
+    -->
+
     <ListView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/listView1"
-        android:background="#ff2a2f55"
         android:divider="#ffffffff"
-        android:dividerHeight="1sp"
+        android:dividerHeight="2sp"
         android:drawSelectorOnTop="true"
-        android:layout_alignParentTop="true"
+        android:layout_above="@+id/check_out"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="100sp" />
+        android:textFilterEnabled="false"
+        android:background="#ff37355c" />
 
     <Button
         android:id="@+id/check_out"
@@ -34,7 +39,7 @@
         android:textColor="#ffffff"
         android:background="@drawable/home_page_button_style"
         android:clickable="true"
-        android:layout_above="@+id/linearLayout1"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -46,7 +51,7 @@
         android:textColor="#ffffff"
         android:background="@drawable/home_page_button_style"
         android:clickable="true"
-        android:layout_above="@+id/linearLayout1"
+        android:layout_alignTop="@+id/check_out"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
