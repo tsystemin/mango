@@ -1,7 +1,15 @@
 package in.co.tsystem.mango;
 
-import android.content.Context;
+import android.app.Activity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.NumberPicker;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /*
 import static example.multicolumnlist.Constants.FIRST_COLUMN;
@@ -9,16 +17,6 @@ import static example.multicolumnlist.Constants.SECOND_COLUMN;
 import static example.multicolumnlist.Constants.THIRD_COLUMN;
 import static example.multicolumnlist.Constants.FOURTH_COLUMN;
 */
-import java.util.ArrayList;
-import java.util.HashMap;
-
-
-import android.app.Activity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 
 /**
@@ -55,9 +53,9 @@ public class ListViewAdapter extends BaseAdapter {
 
     private class ViewHolder{
         TextView txtFirst;
+        NumberPicker np;
         TextView txtSecond;
         TextView txtThird;
-        TextView txtFourth;
     }
 
     @Override
@@ -74,9 +72,9 @@ public class ListViewAdapter extends BaseAdapter {
             holder=new ViewHolder();
 
             holder.txtFirst=(TextView) convertView.findViewById(R.id.TextFirst);
+            holder.np = (NumberPicker) convertView.findViewById(R.id.numberPicker1);
             holder.txtSecond=(TextView) convertView.findViewById(R.id.TextSecond);
             holder.txtThird=(TextView) convertView.findViewById(R.id.TextThird);
-            holder.txtFourth=(TextView) convertView.findViewById(R.id.TextFourth);
 
             convertView.setTag(holder);
         }else{
@@ -90,7 +88,27 @@ public class ListViewAdapter extends BaseAdapter {
         holder.txtFirst.setText(map.get(mg.FIRST_COLUMN));
         holder.txtSecond.setText(map.get(mg.SECOND_COLUMN));
         holder.txtThird.setText(map.get(mg.THIRD_COLUMN));
-        holder.txtFourth.setText(map.get(mg.FOURTH_COLUMN));
+
+        holder.np.setMinValue(0);
+        holder.np.setMaxValue(10);
+        holder.np.setWrapSelectorWheel(false);
+
+
+        holder.np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                // TODO Auto-generated method stub
+/*
+                String Old = "Old Value : ";
+                String New = "New Value : ";
+
+                tv1.setText(Old.concat(String.valueOf(oldVal)));
+                tv2.setText(New.concat(String.valueOf(newVal)));
+                */
+            }
+        });
+
         return convertView;
     }
 
