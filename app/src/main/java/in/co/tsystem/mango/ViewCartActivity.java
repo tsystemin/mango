@@ -2,6 +2,7 @@ package in.co.tsystem.mango;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -125,8 +126,11 @@ public class ViewCartActivity extends Activity {
                     public void onClick(View v)
                     {
                         //DO SOMETHING! {RUN SOME FUNCTION ... DO CHECKS... ETC}
-                        checkOutFromStore chkout_tsk = new checkOutFromStore(mContext);
-                        chkout_tsk.execute();
+                        //checkOutFromStore chkout_tsk = new checkOutFromStore(mContext);
+                        //chkout_tsk.execute();
+
+                        Intent intent = new Intent(ViewCartActivity.this, CheckoutActivity.class);
+                        startActivity(intent);
 
                     }
                 });
