@@ -2,11 +2,13 @@ package in.co.tsystem.mango;
 
 import android.app.Application;
 
+import java.util.HashMap;
+
 /**
  * Created by diganta.paladhi on 06/05/15.
  */
 public class mangoGlobals extends Application {
-    public static String server_ip = "192.168.1.5";
+    public static String server_ip = "10.0.0.141";
     public static String cname;
     public static String cval;
     private static mangoGlobals singleInstance = null;
@@ -16,7 +18,10 @@ public class mangoGlobals extends Application {
     public static final String FIRST_COLUMN="First";
     public static final String SECOND_COLUMN="Second";
     public static final String THIRD_COLUMN="Third";
-    public static final String NUMBER_PICKER="Np";
+    public static final String FOURTH_COLUMN="Fourth";
+
+    HashMap<Integer, cart_item> local_cart = new HashMap<Integer, cart_item>();
+
     @Override
     public void onCreate() {
         super.onCreate();

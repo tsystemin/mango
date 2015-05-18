@@ -27,14 +27,19 @@ public class ViewCartActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        myViewCartAsyncTask tsk;
+        //myViewCartAsyncTask tsk;
+        addToCartFromLocal addtsk;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_cart);
 
         mangoGlobals mg = mangoGlobals.getInstance();
-        tsk = new myViewCartAsyncTask(this);
-        tsk.execute();
+
+        addtsk = new addToCartFromLocal(this);
+        addtsk.execute();
+
+        //tsk = new myViewCartAsyncTask(this);
+        //tsk.execute();
     }
 
     public void checkOut (View view) {
@@ -282,6 +287,62 @@ public class ViewCartActivity extends Activity {
                 Log.i("PRODDET", jb.toString() + "");
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+            return jb;
+        }
+    }
+
+    private class addToCartFromLocal extends AsyncTask<Void, Void, JSONObject > {
+
+        JSONObject jb;
+        private Context mContext;
+        BufferedReader br;
+        myViewCartAsyncTask tsk;
+
+        public addToCartFromLocal(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject result) {
+            super.onPostExecute(result);
+            tsk = new myViewCartAsyncTask(mContext);
+            tsk.execute();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected JSONObject doInBackground(Void... arg) {
+
+            String url_new = null;
+
+            mangoGlobals mg = mangoGlobals.getInstance();
+            String server_ip = mg.server_ip;
+
+
+            for (cart_item item : mg.local_cart.values()) {
+
+                if (!item.added_to_cart || item.item_changed) {
+                    //url_new = "http://" + server_ip + "/opencart/?route=feed/rest_api/cart_add&product_id=" + arg[0] + "&quantity=" + arg[1] + "&key=1234"; // add count
+                    url_new = "http://" + server_ip + "/opencart/?route=feed/rest_api/cart_add&product_id=" + item.prod_id + "&quantity=" + item.quantity + "&key=1234";
+
+                    Log.i("PRODDET prod_id is", item.prod_id + "");
+                    ServerComm.RestService re = new ServerComm.RestService();
+
+                    jb = re.doGet(url_new);
+                    try {
+                        //ver = jb.getString("db_ver");
+                        //version = Integer.parseInt(ver);
+                        Log.i("PRODDET", jb.toString() + "");
+                        item.added_to_cart = true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
             return jb;
         }

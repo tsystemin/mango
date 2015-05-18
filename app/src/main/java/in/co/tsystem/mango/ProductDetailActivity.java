@@ -43,6 +43,7 @@ public class ProductDetailActivity extends ActionBarActivity implements View.OnC
     dnldProductDetails tsk;
     getImageNPopulateDate tsk2;
     TextView tv;
+    mangoGlobals mg = mangoGlobals.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,14 +59,23 @@ public class ProductDetailActivity extends ActionBarActivity implements View.OnC
 
         //updateHotCount();
 
+
         tv = (TextView) findViewById(R.id.hotlist_hot);
         tv.setOnClickListener(this);
 
         Intent myIntent = getIntent();
         prod_id = myIntent.getIntExtra("prod_id", 0);
 
-        tsk = new dnldProductDetails(this);
+        TextView q = (TextView)findViewById(R.id.quantity);
+        cart_item tmp = new cart_item();
+        tmp = mg.local_cart.get(prod_id);
+        if (tmp != null) {
+            q.setText(tmp.quantity.toString());
+        } else {
+            q.setText("0");
+        }
 
+        tsk = new dnldProductDetails(this);
         tsk.execute(prod_id);
 
     }
@@ -133,6 +143,17 @@ public class ProductDetailActivity extends ActionBarActivity implements View.OnC
                     tvd.setText(clear_desc);
                 } catch (Exception e) {
                 }
+
+                /*
+                TextView q = (TextView)findViewById(R.id.quantity);
+                cart_item tmp = new cart_item();
+                tmp = mg.local_cart.get(prod_id);
+                if (tmp != null) {
+                    q.setText(tmp.quantity.toString());
+                } else {
+                    q.setText("0");
+                }*/
+
             } catch (Exception e) {
 
             }
@@ -176,8 +197,23 @@ public class ProductDetailActivity extends ActionBarActivity implements View.OnC
                     CharSequence cnt = tv.getText();
                     Integer c = Integer.parseInt(cnt.toString());
                     //DO SOMETHING! {RUN SOME FUNCTION ... DO CHECKS... ETC}
-                    addToCart cart_tsk = new addToCart(mContext);
-                    cart_tsk.execute(prod_id, c);
+
+                    //addToCart cart_tsk = new addToCart(mContext);
+                    //cart_tsk.execute(prod_id, c);
+
+                    // ADD to local_cart
+                    cart_item ci = new cart_item();
+                    cart_item tmp = new cart_item();
+
+                    ci.quantity = c;
+                    ci.prod_id = prod_id;
+
+                    tmp = mg.local_cart.get(prod_id);
+                    if (tmp != null) {
+                        tmp.quantity = c;
+                    } else {
+                        mg.local_cart.put(prod_id, ci);
+                    }
 
                 }
             });
@@ -284,6 +320,9 @@ public class ProductDetailActivity extends ActionBarActivity implements View.OnC
             return jb;
         }
     }
+
+    // Righ tnow not using addCart to add individual items directly to server. We update the local_cart and then
+    // once ViewCartActivity is called, we update cart on server.
 
     private class addToCart extends AsyncTask< Integer, Void, JSONObject > {
 

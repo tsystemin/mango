@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
@@ -53,9 +54,12 @@ public class ListViewAdapter extends BaseAdapter {
 
     private class ViewHolder{
         TextView txtFirst;
-        NumberPicker np;
+        //NumberPicker np;
+        Button inc;
         TextView txtSecond;
+        Button dec;
         TextView txtThird;
+
     }
 
     @Override
@@ -72,9 +76,12 @@ public class ListViewAdapter extends BaseAdapter {
             holder=new ViewHolder();
 
             holder.txtFirst=(TextView) convertView.findViewById(R.id.TextFirst);
-            holder.np = (NumberPicker) convertView.findViewById(R.id.numberPicker1);
+            //holder.np = (NumberPicker) convertView.findViewById(R.id.numberPicker1);
+            holder.inc = (Button) convertView.findViewById(R.id.inc);
             holder.txtSecond=(TextView) convertView.findViewById(R.id.TextSecond);
+            holder.dec = (Button) convertView.findViewById(R.id.dec);
             holder.txtThird=(TextView) convertView.findViewById(R.id.TextThird);
+
 
             convertView.setTag(holder);
         }else{
@@ -89,25 +96,25 @@ public class ListViewAdapter extends BaseAdapter {
         holder.txtSecond.setText(map.get(mg.SECOND_COLUMN));
         holder.txtThird.setText(map.get(mg.THIRD_COLUMN));
 
-        holder.np.setMinValue(0);
-        holder.np.setMaxValue(10);
-        holder.np.setWrapSelectorWheel(false);
+        //holder.np.setMinValue(0);
+        //holder.np.setMaxValue(10);
+        //holder.np.setWrapSelectorWheel(false);
 
 
+        /*
         holder.np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
 
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 // TODO Auto-generated method stub
-/*
                 String Old = "Old Value : ";
                 String New = "New Value : ";
 
                 tv1.setText(Old.concat(String.valueOf(oldVal)));
                 tv2.setText(New.concat(String.valueOf(newVal)));
-                */
+
             }
-        });
+        });*/
 
         return convertView;
     }

@@ -2,32 +2,52 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:background="#ffffa94f"
+    android:dividerPadding="2sp"
+    android:divider="#ffffff">
     <TextView
         android:id="@+id/TextFirst"
-        android:layout_height="50dp"
-        android:layout_width="wrap_content"
+        android:layout_height="50sp"
+        android:layout_width="50sp"
         android:width="0dp"
         android:text="First"
-        android:layout_weight="2" />
+        android:layout_weight="2"
+        android:textColor="#000000"
+        android:gravity="center_vertical" />
 
-    <NumberPicker
-        android:id="@+id/numberPicker1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="horizontal" />
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="60sp"
+        android:layout_height="50sp"
+        android:text="+"
+        android:id="@+id/inc"
+        android:background="#fff5ff40"
+        android:textSize="40sp" />
 
     <TextView
         android:id="@+id/TextSecond"
         android:layout_height="50sp"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:text="Second"/>
+        android:text="Second"
+        android:textColor="#000000"
+        android:gravity="center_vertical" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="60sp"
+        android:layout_height="50sp"
+        android:text="-"
+        android:id="@+id/dec"
+        android:background="#fff5ff40"
+        android:textSize="40sp" />
+
     <TextView
         android:id="@+id/TextThird"
         android:layout_height="50sp"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:text="Third"/>
+        android:text="Third"
+        android:textColor="#000000"
+        android:gravity="center_vertical" />
 </LinearLayout>
