@@ -316,6 +316,8 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
                 if (aJsonString.equals("TRUE")) {
                     SaveSharedPreference.setUserName(mContext, USER_NAME);
                     SaveSharedPreference.setPassword(mContext, PASS);
+                    // Check number of items in cart and update hot counter. - Diganta
+
                     Intent intent = new Intent(mContext, CategoryActivity.class);
                     startActivity(intent);
                 } else {

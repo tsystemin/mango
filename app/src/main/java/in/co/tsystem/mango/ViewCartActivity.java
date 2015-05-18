@@ -3,10 +3,16 @@ package in.co.tsystem.mango;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -31,7 +37,33 @@ public class ViewCartActivity extends Activity {
         addToCartFromLocal addtsk;
 
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_view_cart);
+
+        // Change the cart window size.
+        // Calculate ActionBar height
+        Integer actionBarHeight = 0;
+        TypedValue tv = new TypedValue();
+        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
+        {
+            actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
+        }
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        //params.x = 20;
+        params.height = (height * 3) / 4;
+        params.width = (width * 3) / 4;
+        params.gravity = Gravity.RIGHT | Gravity.TOP;
+        //params.layoutAnimationParameters
+        params.y = actionBarHeight;
+
+        this.getWindow().setAttributes(params);
 
         mangoGlobals mg = mangoGlobals.getInstance();
 
