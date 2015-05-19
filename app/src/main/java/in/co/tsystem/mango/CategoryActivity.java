@@ -127,7 +127,7 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
             public void onDrawerSlide(View drawerView, float offset)
             {
                 View container = findViewById(R.id.listView1);
-                container.setTranslationX(offset*drawerView.getWidth());
+                container.setTranslationX(offset * drawerView.getWidth());
             }
 
         };
@@ -148,6 +148,18 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
             default:
                 break;
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        // Handle your other action bar items...
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void onNavigationDrawerItemSelected(int position) {
