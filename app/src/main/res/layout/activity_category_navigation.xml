@@ -40,7 +40,7 @@
         android:dividerHeight="2dp"
         android:headerDividersEnabled="true"
         android:footerDividersEnabled="true"
-        tools:context=".NavigationDrawer"
+        tools:context=".CategoryActivity"
         android:drawSelectorOnTop="false"
         android:nestedScrollingEnabled="false"
         android:id="@+id/NavList1" />
