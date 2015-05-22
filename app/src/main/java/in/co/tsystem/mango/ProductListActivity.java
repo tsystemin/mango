@@ -3,7 +3,10 @@ package in.co.tsystem.mango;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -38,6 +41,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static in.co.tsystem.mango.R.drawable.ic_drawer;
+
 
 public class ProductListActivity extends ActionBarActivity implements View.OnClickListener{
 
@@ -45,6 +50,9 @@ public class ProductListActivity extends ActionBarActivity implements View.OnCli
     int cat_id = 0;
     String server_ip;
     TextView tv;
+    ActionBarDrawerToggle actionBarDrawerToggle;
+    private ListView mDrawerListView;
+    String[] drawer_array;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +76,132 @@ public class ProductListActivity extends ActionBarActivity implements View.OnCli
 
         tsk = new getProductList(this);
         tsk.execute();
+
+        // navigation drawer new
+        Resources resource = getResources();
+        drawer_array = resource.getStringArray(R.array.nav_drawer_array);
+
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout3);
+
+        mDrawerListView = (ListView) findViewById(R.id.NavList3);
+        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                onNavigationDrawerItemSelected(position);
+            }
+        });
+        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_activated_1,
+                android.R.id.text1,
+                new String[]{
+                        drawer_array[0],
+                        drawer_array[1],
+                        drawer_array[2],
+                        drawer_array[3],
+                        drawer_array[4],
+                        drawer_array[5],
+                        drawer_array[6],
+                        drawer_array[7],
+                        drawer_array[8]
+                }));
+
+        //android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                ic_drawer,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close
+        )
+        {
+            public void onDrawerClosed(View view)
+            {
+                super.onDrawerClosed(view);
+                invalidateOptionsMenu();
+                syncState();
+            }
+
+            public void onDrawerOpened(View drawerView)
+            {
+                super.onDrawerOpened(drawerView);
+                invalidateOptionsMenu();
+                syncState();
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float offset)
+            {
+                View container = findViewById(R.id.Relative3);
+                container.setTranslationX(offset * drawerView.getWidth());
+            }
+
+        };
+
+        drawerLayout.setDrawerListener(actionBarDrawerToggle);
+
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+        actionBarDrawerToggle.syncState();
+    }
+
+
+    public void onNavigationDrawerItemSelected(int position) {
+        try {
+            switch (position) {
+                case 0:
+                    break;
+                case 1:
+                    //intent = new Intent(MainActivity.this, Vedanta.class);
+                    //startActivity(intent);
+
+                case 2:
+                    //intent = new Intent(MainActivity.this, Festival.class);
+                    //startActivity(intent);
+                    break;
+                case 3:
+                    //intent = new Intent(MainActivity.this, Ideology.class);
+                    //startActivity(intent);
+                    view_cart(null);
+                    break;
+                case 4:
+                    //intent = new Intent(MainActivity.this, SriRamakrishna.class);
+                    //startActivity(intent);
+                    break;
+                case 5:
+                    //intent = new Intent(MainActivity.this, SaradaDevi.class);
+                    //startActivity(intent);
+                    break;
+                case 6:
+                    //intent = new Intent(MainActivity.this, SwamiVivekananda.class);
+                    //startActivity(intent);
+                    break;
+                case 7:
+                    //intent = new Intent(MainActivity.this, Emblem.class);
+                    //startActivity(intent);
+                    break;
+                case 8:
+                    //intent = new Intent(MainActivity.this, BranchesActivity.class);
+                    //startActivity(intent);
+                    Intent intent = new Intent(this, CheckoutActivity.class);
+                    startActivity(intent);
+                    break;
+                case 9:
+                    //intent = new Intent(MainActivity.this, DonationPage.class);
+                    //startActivity(intent);
+                    break;
+                case 10:
+                    //intent = new Intent(MainActivity.this, ContactUs.class);
+                    //startActivity(intent);
+                    break;
+                default:
+                    break;
+            }
+        }
+        catch (Exception e) {
+            super.onStop();
+        }
+
     }
 
     public void onClick(View view) {
@@ -85,11 +219,19 @@ public class ProductListActivity extends ActionBarActivity implements View.OnCli
         startActivity(intent);
     }
 
-    /*@Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -98,7 +240,7 @@ public class ProductListActivity extends ActionBarActivity implements View.OnCli
         }
 
         return super.onOptionsItemSelected(item);
-    }*/
+    }
 
     private class getProductList extends AsyncTask< Void, Void, JSONObject > {
 

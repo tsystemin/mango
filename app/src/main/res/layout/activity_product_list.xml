@@ -1,10 +1,17 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    tools:context="in.co.tsystem.gamechanger.ProductListActivity"
-    android:background="#000000"
-    android:clickable="false">
+    android:id="@+id/drawer_layout3"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProductListActivity">
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="in.co.tsystem.mango.ProductDetailActivity"
+        android:id="@+id/Relative3"
+        android:background="#2164b2fa">
 
     <ListView
         android:layout_width="fill_parent"
@@ -20,4 +27,23 @@
         android:divider="#ffffffff"
         android:drawSelectorOnTop="false"
         android:dividerHeight="2sp" />
-</RelativeLayout>
+    </RelativeLayout>
+
+    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:choiceMode="singleChoice"
+        android:background="#ffffffff"
+        android:alpha="255"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="2dp"
+        android:headerDividersEnabled="true"
+        android:footerDividersEnabled="true"
+        tools:context=".ProductListActivity"
+        android:drawSelectorOnTop="false"
+        android:nestedScrollingEnabled="false"
+        android:id="@+id/NavList3" />
+</android.support.v4.widget.DrawerLayout>
+
