@@ -3,16 +3,20 @@ package in.co.tsystem.mango;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.provider.MediaStore;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -23,6 +27,8 @@ import java.io.BufferedReader;
 public class CheckoutActivity extends Activity {
 
     String payment_method;
+    EditText billing_addr, delivery_addr;
+    CheckBox use_same_addr, use_reg_addr;
 
 
     @Override
@@ -58,6 +64,41 @@ public class CheckoutActivity extends Activity {
         });
         */
 
+        billing_addr = (EditText) findViewById(R.id.bill_addr);
+        delivery_addr = (EditText) findViewById(R.id.deli_addr);
+        use_same_addr = (CheckBox) findViewById(R.id.del_same_as_bill);
+
+        use_same_addr.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //is chkIos checked?
+                if (((CheckBox) v).isChecked()) {
+                    delivery_addr.setText(billing_addr.getText());
+                }
+
+            }
+        });
+
+        use_reg_addr = (CheckBox) findViewById(R.id.use_reg_addr);
+        use_reg_addr.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //is chkIos checked?
+                if (((CheckBox) v).isChecked()) {
+                    billing_addr.setEnabled(false);
+                    delivery_addr.setEnabled(false);
+                } else {
+                    billing_addr.setEnabled(true);
+                    delivery_addr.setEnabled(true);
+                }
+            }
+        });
+
+
+
+
         Button chkout = (Button)findViewById(R.id.chkoutbutton);
         chkout.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -75,9 +116,17 @@ public class CheckoutActivity extends Activity {
                 } else {
                     Toast.makeText(CheckoutActivity.this,
                             "Only Cash on Delivery supported right now", Toast.LENGTH_SHORT).show();
+
+
                     return;
                     //finish();
                 }
+
+                String bill = billing_addr.getText().toString();
+                String delivery = delivery_addr.getText().toString();
+
+                Toast.makeText(getApplicationContext(), bill + " and " + delivery,
+                        Toast.LENGTH_LONG).show();
 
                 checkOutFromStore tsk = new checkOutFromStore(CheckoutActivity.this);
                 tsk.execute(payment_method);
