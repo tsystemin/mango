@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.apache.http.HttpResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -29,6 +30,7 @@ import java.util.List;
 
 public class ViewCartActivity extends Activity {
     private JSONObject response;
+    HttpResponse httpresp;
     mangoGlobals mg = mangoGlobals.getInstance();
 
     @Override
@@ -349,32 +351,44 @@ public class ViewCartActivity extends Activity {
 
         @Override
         protected JSONObject doInBackground(Void... arg) {
-
             String url_new = null;
+
+            JSONObject mainobj = new JSONObject();
+            JSONArray objArray = new JSONArray();
+
 
             mangoGlobals mg = mangoGlobals.getInstance();
             String server_ip = mg.server_ip;
-
+            String cartBulkAddUri = "http://"+ mg.server_ip +"/opencart/index.php?route=feed/rest_api/cart_add_bulk";
+            String postData="";
 
             for (cart_item item : mg.local_cart.values()) {
-
                 if (!item.added_to_cart || item.item_changed) {
-                    //url_new = "http://" + server_ip + "/opencart/?route=feed/rest_api/cart_add&product_id=" + arg[0] + "&quantity=" + arg[1] + "&key=1234"; // add count
-                    url_new = "http://" + server_ip + "/opencart/?route=feed/rest_api/cart_add&product_id=" + item.prod_id + "&quantity=" + item.quantity + "&key=1234";
-
-                    Log.i("PRODDET prod_id is", item.prod_id + "");
-                    ServerComm.RestService re = new ServerComm.RestService();
-
-                    jb = re.doGet(url_new);
+                    //postData += "{'product_id' : " + item.prod_id + ", 'quantity' : " + item.quantity + "}";
+                    item.added_to_cart = true;
                     try {
-                        //ver = jb.getString("db_ver");
-                        //version = Integer.parseInt(ver);
-                        Log.i("PRODDET", jb.toString() + "");
-                        item.added_to_cart = true;
-                    } catch (Exception e) {
+                        JSONObject obj = new JSONObject();
+                        obj.put("product_id", item.prod_id);
+                        obj.put("quantity", item.quantity);
+                        objArray.put(obj);
+                    } catch (Exception e){
                         e.printStackTrace();
                     }
                 }
+            }
+            try {
+                mainobj.put("products", objArray);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                //obj = new JSONObject(postData);
+                HttpPostFunction sChannel = new HttpPostFunction();
+                httpresp = sChannel.processPost(cartBulkAddUri, mainobj);
+
+                Thread.sleep(2000);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             return jb;
         }

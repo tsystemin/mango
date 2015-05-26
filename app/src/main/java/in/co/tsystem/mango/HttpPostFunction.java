@@ -4,8 +4,6 @@ package in.co.tsystem.mango;
  * Created by diganta.paladhi on 05/04/15.
  */
 
-import android.util.Log;
-
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -15,6 +13,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,8 +60,11 @@ public class HttpPostFunction {
                 String cookie_val[];
                 cookie_elements = cookie_str.split("=");
                 cookie_val = cookie_elements[2].split("\\}");
-                mangoGlobals.cname = cookie_elements[1];
-                mangoGlobals.cval = cookie_val[0];
+                if (mangoGlobals.cookie_set == 0) {
+                    mangoGlobals.cname = cookie_elements[1];
+                    mangoGlobals.cval = cookie_val[0];
+                    mangoGlobals.cookie_set = 1;
+                }
             }
 
             return response;
