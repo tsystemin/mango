@@ -19,6 +19,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.HttpResponse;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -29,6 +30,7 @@ public class CheckoutActivity extends Activity {
     String payment_method;
     EditText billing_addr, delivery_addr;
     CheckBox use_same_addr, use_reg_addr;
+    mangoGlobals mg = mangoGlobals.getInstance();
 
 
     @Override
@@ -125,11 +127,37 @@ public class CheckoutActivity extends Activity {
                 String bill = billing_addr.getText().toString();
                 String delivery = delivery_addr.getText().toString();
 
-                Toast.makeText(getApplicationContext(), bill + " and " + delivery,
-                        Toast.LENGTH_LONG).show();
+                String checkoutUri;
+                String postData;
 
-                checkOutFromStore tsk = new checkOutFromStore(CheckoutActivity.this);
-                tsk.execute(payment_method);
+                if (bill.isEmpty() && delivery.isEmpty()) {
+                    checkoutUri = "http://" + mg.server_ip + "/opencart/index.php?route=feed/rest_api/checkoutpost";
+                    postData = "{'payment_method' : " + payment_method + ", 'shipping_method' : flat.flat" + "}";
+
+                } else {
+                    String bill1 = bill.replaceAll(",", "%40");
+                    bill = bill1.replaceAll(" ", "%20");
+                    bill1 = bill.replaceAll("-", "%30");
+
+
+                    String delivery1 = delivery.replaceAll(",", "%40");
+                    delivery = delivery1.replaceAll(" ", "%20");
+                    delivery1 = delivery.replaceAll("-", "%30");
+
+                    Toast.makeText(getApplicationContext(), bill1 + " and " + delivery1,
+                            Toast.LENGTH_LONG).show();
+
+                    //String registerUri = "http://"+ mg.server_ip +"?route=feed/rest_api/checkout&payment_method="+arg[0]+"&shipping_method=flat.flat&key=1234";
+                    checkoutUri = "http://" + mg.server_ip + "/opencart/index.php?route=feed/rest_api/checkoutpost";
+
+                    postData = "{'payment_method' : " + payment_method + ", 'payment_address' : " + bill1 + ", 'shipping_method' : flat.flat" +
+                            ", 'shipping_address' : " + delivery1 + "}";
+                }
+
+                checkoutPost tsk = new checkoutPost(CheckoutActivity.this);
+                //tsk.execute(payment_method);
+                tsk.execute(checkoutUri, postData);
+
             }
         });
 
@@ -158,7 +186,38 @@ public class CheckoutActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    private class checkoutPost extends AsyncTask<String, Void, HttpResponse> {
+        private Context mContext;
+        private HttpResponse response;
 
+        public checkoutPost(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        protected void onPostExecute(HttpResponse result) {
+            super.onPostExecute(result);
+        }
+
+        @Override
+        protected HttpResponse doInBackground(String... arg0) {
+            JSONObject obj;
+
+            try {
+                obj = new JSONObject(arg0[1]);
+                HttpPostFunction sChannel = new HttpPostFunction();
+                response = sChannel.processPost(arg0[0], obj);
+
+                Thread.sleep(2000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return response;
+        }
+    }
+
+    /*
     private class checkOutFromStore extends AsyncTask< String, Void, JSONObject > {
 
         JSONObject jb;
@@ -224,5 +283,5 @@ public class CheckoutActivity extends Activity {
             }
             return jb;
         }
-    }
+    }*/
 }
