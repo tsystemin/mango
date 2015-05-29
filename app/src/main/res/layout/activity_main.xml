@@ -32,6 +32,21 @@
         android:layout_above="@+id/linearLayout"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:text="GUEST LOGIN"
+        android:id="@+id/guest_login"
+        android:textColor="#ffffff"
+        android:background="@drawable/home_page_button_style"
+        android:layout_marginBottom="18dp"
+        android:layout_above="@+id/g_login_button"
+        android:layout_alignRight="@+id/fb_login_button"
+        android:layout_alignEnd="@+id/fb_login_button"
+        android:layout_alignLeft="@+id/fb_login_button"
+        android:layout_alignStart="@+id/fb_login_button" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -60,5 +75,7 @@
             android:layout_marginEnd="15sp"
             android:background="@drawable/home_page_button_style"
             android:clickable="true" />
+
     </LinearLayout>
+
 </RelativeLayout>

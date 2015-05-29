@@ -193,8 +193,8 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
                     //startActivity(intent);
                     break;
                 case 7:
-                    //intent = new Intent(MainActivity.this, Emblem.class);
-                    //startActivity(intent);
+                    Intent intentgd = new Intent(this, GuestDetails.class);
+                    startActivity(intentgd);
                     break;
                 case 8:
                     //intent = new Intent(MainActivity.this, BranchesActivity.class);

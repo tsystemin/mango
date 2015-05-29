@@ -102,6 +102,10 @@
             android:name=".CheckoutActivity"
             android:label="@string/title_activity_checkout" >
         </activity>
+        <activity
+            android:name=".GuestDetails"
+            android:label="@string/title_activity_guest_details" >
+        </activity>
     </application>
 
 </manifest>

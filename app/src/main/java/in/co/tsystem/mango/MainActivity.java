@@ -67,8 +67,16 @@ public class MainActivity extends Activity implements View.OnClickListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final String USER = SaveSharedPreference.getUserName(MainActivity.this);
-        final String PASS = SaveSharedPreference.getPass(MainActivity.this);
+        //AVI Directly open catagory listing
+        //Intent intent = new Intent(this, CategoryActivity.class);
+        //startActivity(intent);
+
+        //AVI
+        String USER = SaveSharedPreference.getUserName(MainActivity.this);
+        String PASS = SaveSharedPreference.getPass(MainActivity.this);
+
+        USER = "";
+        PASS = "";
 
         if(USER.length() == 0 || PASS.length() == 0)
         {
@@ -107,6 +115,14 @@ public class MainActivity extends Activity implements View.OnClickListener,
             gcSignUpButton.setOnClickListener(this);
 
             main_view = findViewById(R.id.main_view);
+
+            Button glogin = (Button)findViewById(R.id.guest_login);
+            glogin.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent CatIntent = new Intent(MainActivity.this, CategoryActivity.class);
+                    startActivity(CatIntent);
+                }
+            });
         }
         else
         {
