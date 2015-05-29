@@ -71,12 +71,12 @@ public class MainActivity extends Activity implements View.OnClickListener,
         //Intent intent = new Intent(this, CategoryActivity.class);
         //startActivity(intent);
 
-        //AVI
         String USER = SaveSharedPreference.getUserName(MainActivity.this);
         String PASS = SaveSharedPreference.getPass(MainActivity.this);
 
-        USER = "";
-        PASS = "";
+        //AVI
+        //USER = "";
+        //PASS = "";
 
         if(USER.length() == 0 || PASS.length() == 0)
         {
