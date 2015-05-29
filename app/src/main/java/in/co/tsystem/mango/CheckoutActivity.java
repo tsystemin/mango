@@ -14,15 +14,21 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class CheckoutActivity extends Activity {
@@ -197,6 +203,41 @@ public class CheckoutActivity extends Activity {
         @Override
         protected void onPostExecute(HttpResponse result) {
             super.onPostExecute(result);
+            String ret;
+            try {
+                HttpEntity entity = result.getEntity();
+                InputStream inputStream = null;
+                String myresult = null;
+
+                inputStream = entity.getContent();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
+                StringBuilder sb = new StringBuilder();
+
+                String line = null;
+                while ((line = reader.readLine()) != null)
+                {
+                    sb.append(line + "\n");
+                }
+                myresult = sb.toString();
+                //JSONObject json_result = new JSONObject(myresult);
+                //String aJsonString = json_result.getString("success");
+
+                if (myresult.contains("PASS")) {
+
+                    cartClearfrmchkout cc = new cartClearfrmchkout(mContext);
+                    cc.execute();
+
+                    Toast.makeText(getApplicationContext(), "Your order is placed successfully",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    Log.d("CHECKOUT ERROR", "code" + myresult);
+                    Toast.makeText(getApplicationContext(), myresult,
+                            Toast.LENGTH_LONG).show();
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
@@ -214,6 +255,53 @@ public class CheckoutActivity extends Activity {
             }
 
             return response;
+        }
+    }
+
+    private class cartClearfrmchkout extends AsyncTask< Void, Void, JSONObject > {
+
+        JSONObject jb;
+        private Context mContext;
+        BufferedReader br;
+
+        public cartClearfrmchkout(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject result) {
+            super.onPostExecute(result);
+            //clear the cart on APP
+            mg.local_cart.clear();
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected JSONObject doInBackground(Void... arg) {
+
+            String url_new = null, ver = null;
+            int version = 0;
+
+            mangoGlobals mg = mangoGlobals.getInstance();
+            String server_ip = mg.server_ip;
+            url_new = "http://"+ server_ip +"/opencart/?route=feed/rest_api/cart_clear&key=1234"; // add count
+
+            //Log.i("PRODDET prod_id is", arg[0] + "");
+            ServerComm.RestService re = new ServerComm.RestService();
+            jb = re.doGet(url_new);
+            try {
+                //ver = jb.getString("db_ver");
+                //version = Integer.parseInt(ver);
+                Log.i("PRODDET", jb.toString() + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return jb;
         }
     }
 

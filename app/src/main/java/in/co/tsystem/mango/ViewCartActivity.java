@@ -283,6 +283,7 @@ public class ViewCartActivity extends Activity {
             super.onPostExecute(result);
             //clear the cart on APP
 
+            mg.local_cart.clear();
             final ListView listview1 = (ListView) findViewById(R.id.listView1);
             //sankar final ArrayList<String> list_prod = new ArrayList<String>();
             ArrayList<HashMap<String, String>> list_prod = new ArrayList<HashMap<String, String>>();
