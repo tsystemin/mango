@@ -8,7 +8,7 @@ import java.util.HashMap;
  * Created by diganta.paladhi on 06/05/15.
  */
 public class mangoGlobals extends Application {
-    public static String server_ip = "10.20.32.169";
+    public static String server_ip = "10.0.0.105";
     public static String cname;
     public static String cval;
     public static Integer cookie_set = 0;
@@ -20,6 +20,8 @@ public class mangoGlobals extends Application {
     public static final String SECOND_COLUMN="Second";
     public static final String THIRD_COLUMN="Third";
     public static final String FOURTH_COLUMN="Fourth";
+    public static String user = "";
+    public static String passwd = "";
 
     HashMap<Integer, cart_item> local_cart = new HashMap<Integer, cart_item>();
 

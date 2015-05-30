@@ -373,6 +373,10 @@ public class GcRegisterActivity extends Activity implements LoaderManager.Loader
                 if (aJsonString.equals("TRUE")) {
                     SaveSharedPreference.setUserName(mContext, USER_NAME);
                     SaveSharedPreference.setPassword(mContext, PASS);
+
+                    mangoGlobals.user = USER_NAME;
+                    mangoGlobals.passwd = PASS;
+
                     Intent intent = new Intent(mContext, CategoryActivity.class);
                     startActivity(intent);
                 } else if (aJsonString.equals("EXISTS")) {

@@ -74,6 +74,8 @@ public class MainActivity extends Activity implements View.OnClickListener,
         String USER = SaveSharedPreference.getUserName(MainActivity.this);
         String PASS = SaveSharedPreference.getPass(MainActivity.this);
 
+        mangoGlobals.user = USER;
+        mangoGlobals.passwd = PASS;
         //AVI
         //USER = "";
         //PASS = "";

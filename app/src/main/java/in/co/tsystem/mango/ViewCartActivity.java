@@ -166,9 +166,16 @@ public class ViewCartActivity extends Activity {
                         //DO SOMETHING! {RUN SOME FUNCTION ... DO CHECKS... ETC}
                         //checkOutFromStore chkout_tsk = new checkOutFromStore(mContext);
                         //chkout_tsk.execute();
+                        Intent intent;
 
-                        Intent intent = new Intent(ViewCartActivity.this, CheckoutActivity.class);
-                        startActivity(intent);
+                        if (mg.user.isEmpty() || mg.passwd.isEmpty()) {
+                            intent = new Intent(ViewCartActivity.this, GuestDetails.class);
+                            startActivity(intent);
+
+                        } else {
+                            intent = new Intent(ViewCartActivity.this, CheckoutActivity.class);
+                            startActivity(intent);
+                        }
 
                     }
                 });
