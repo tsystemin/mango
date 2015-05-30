@@ -60,12 +60,17 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
     private View mProgressView;
     private View mLoginFormView;
     private HttpResponse response;
+    String caller = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gc_login);
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+             caller = extras.getString("CallerActivity");
+        }
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -319,9 +324,15 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
                     // Check number of items in cart and update hot counter. - Diganta
                     mg.user = USER_NAME;
                     mg.passwd = PASS;
+                    Intent intenttocall;
 
-                    Intent intent = new Intent(mContext, CategoryActivity.class);
-                    startActivity(intent);
+                    if (!caller.isEmpty() && caller.equals("guestdetails")) {
+                        intenttocall = new Intent(mContext, CheckoutActivity.class);
+                        startActivity(intenttocall);
+                    } else {
+                        intenttocall = new Intent(mContext, CategoryActivity.class);
+                        startActivity(intenttocall);
+                    }
                 } else {
                     new AlertDialog.Builder(mContext)
                             .setTitle("Invalid Credentials!")
