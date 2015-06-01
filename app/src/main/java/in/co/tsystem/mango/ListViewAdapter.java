@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -59,6 +58,7 @@ public class ListViewAdapter extends BaseAdapter {
         TextView txtSecond;
         Button dec;
         TextView txtThird;
+        TextView txtFourth;
 
     }
 
@@ -81,6 +81,7 @@ public class ListViewAdapter extends BaseAdapter {
             holder.txtSecond=(TextView) convertView.findViewById(R.id.TextSecond);
             holder.dec = (Button) convertView.findViewById(R.id.dec);
             holder.txtThird=(TextView) convertView.findViewById(R.id.TextThird);
+            holder.txtFourth = (TextView) convertView.findViewById(R.id.TextFourth);
 
 
             convertView.setTag(holder);
@@ -95,26 +96,44 @@ public class ListViewAdapter extends BaseAdapter {
         holder.txtFirst.setText(map.get(mg.FIRST_COLUMN));
         holder.txtSecond.setText(map.get(mg.SECOND_COLUMN));
         holder.txtThird.setText(map.get(mg.THIRD_COLUMN));
+        holder.txtFourth.setText(map.get(mg.FOURTH_COLUMN));
+        final TextView quantity = (TextView)convertView.findViewById(R.id.TextSecond);
+        final TextView total_price = (TextView)convertView.findViewById(R.id.TextFourth);
+        final TextView unit_price = (TextView)convertView.findViewById(R.id.TextThird);
 
-        //holder.np.setMinValue(0);
-        //holder.np.setMaxValue(10);
-        //holder.np.setWrapSelectorWheel(false);
+        holder.inc.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                CharSequence cnt = quantity.getText();
+                Integer c = Integer.parseInt(cnt.toString());
+
+                CharSequence myprice = unit_price.getText();
+                Double pr = Double.parseDouble(myprice.toString());
+
+                c++;
+                pr *= c;
+                quantity.setText(c.toString());
+                total_price.setText(pr.toString());
+            }
+        });
+        holder.dec.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //DO SOMETHING! {RUN SOME FUNCTION ... DO CHECKS... ETC}
+                CharSequence cnt = quantity.getText();
+                Integer c = Integer.parseInt(cnt.toString());
+                CharSequence myprice = unit_price.getText();
+                Double pr = Double.parseDouble(myprice.toString());
 
 
-        /*
-        holder.np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                if (c > 0) {
+                    c--;
+                    pr *= c;
 
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                // TODO Auto-generated method stub
-                String Old = "Old Value : ";
-                String New = "New Value : ";
-
-                tv1.setText(Old.concat(String.valueOf(oldVal)));
-                tv2.setText(New.concat(String.valueOf(newVal)));
+                    quantity.setText(c.toString());
+                    total_price.setText(pr.toString());
+                }
 
             }
-        });*/
+        });
 
         return convertView;
     }

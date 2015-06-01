@@ -3,16 +3,12 @@ package in.co.tsystem.mango;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -50,7 +46,7 @@ public class ViewCartActivity extends Activity {
         {
             actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
         }
-
+/*
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -66,7 +62,7 @@ public class ViewCartActivity extends Activity {
         params.y = actionBarHeight;
 
         this.getWindow().setAttributes(params);
-
+*/
         mangoGlobals mg = mangoGlobals.getInstance();
 
         addtsk = new addToCartFromLocal(this);
@@ -123,7 +119,8 @@ public class ViewCartActivity extends Activity {
             JSONObject item;
             String prod_name;
             String quantity;
-            String price;
+            String unit_price;
+            String total_price;
 
             Integer prod_id;
             final ListView listview1 = (ListView) findViewById(R.id.listView1);
@@ -137,7 +134,8 @@ public class ViewCartActivity extends Activity {
                     prod_name  = item.getString("name");
                     prod_id = item.getInt("product_id");
                     quantity = item.getString("quantity");
-                    price = item.getString("price");
+                    unit_price = item.getString("price");
+                    total_price = item.getString("total");
                     /*
                     list_prod.add(prod_name);
                     ProdIdMap.put(prod_name, prod_id);
@@ -146,8 +144,8 @@ public class ViewCartActivity extends Activity {
                     HashMap<String,String> temp=new HashMap<String, String>();
                     temp.put(mg.FIRST_COLUMN, prod_name);
                     temp.put(mg.SECOND_COLUMN, quantity);
-                    temp.put(mg.THIRD_COLUMN, price);
-
+                    temp.put(mg.THIRD_COLUMN, unit_price);
+                    temp.put(mg.FOURTH_COLUMN, total_price);
 
                     list_prod.add(temp);
 
