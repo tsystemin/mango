@@ -341,7 +341,7 @@ public class ProductDetailActivity extends ActionBarActivity implements View.OnC
 
                     // ADD to local_cart
                     cart_item ci = new cart_item();
-                    cart_item tmp = new cart_item();
+                    cart_item tmp = ci;
 
                     ci.quantity = c;
                     ci.prod_id = prod_id;
@@ -351,6 +351,9 @@ public class ProductDetailActivity extends ActionBarActivity implements View.OnC
                         tmp.quantity = c;
                     } else {
                         mg.local_cart.put(prod_id, ci);
+                        mg.no_of_items_in_cart += 1;
+                        TextView no_of_item = (TextView) findViewById(R.id.hotlist_hot);
+                        no_of_item.setText(String.valueOf(mg.no_of_items_in_cart));
                     }
 
                 }
