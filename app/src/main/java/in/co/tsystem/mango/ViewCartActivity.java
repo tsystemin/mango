@@ -394,8 +394,6 @@ public class ViewCartActivity extends Activity {
                 //obj = new JSONObject(postData);
                 HttpPostFunction sChannel = new HttpPostFunction();
                 httpresp = sChannel.processPost(cartBulkAddUri, mainobj);
-
-                Thread.sleep(2000);
             } catch (Exception e) {
                 e.printStackTrace();
             }
