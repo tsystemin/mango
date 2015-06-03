@@ -411,7 +411,6 @@ public class GcRegisterActivity extends Activity implements LoaderManager.Loader
                 obj = new JSONObject(arg0[1]);
                 sChannel = new HttpPostFunction();
                 response = sChannel.processPost(arg0[0], obj);
-                Thread.sleep(2000);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (JSONException e) {

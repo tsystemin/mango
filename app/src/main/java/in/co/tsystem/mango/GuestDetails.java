@@ -190,8 +190,6 @@ public class GuestDetails extends Activity {
                 obj = new JSONObject(arg0[1]);
                 HttpPostFunction sChannel = new HttpPostFunction();
                 response = sChannel.processPost(arg0[0], obj);
-
-                Thread.sleep(2000);
             } catch (Exception e) {
                 e.printStackTrace();
             }
