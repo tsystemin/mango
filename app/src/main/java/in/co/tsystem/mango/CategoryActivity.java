@@ -220,59 +220,6 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
 
     }
 
-    private int hot_number = 0;
-    private TextView ui_hot = null;
-
-    // call the updating code on the main thread,
-    // so we can call this asynchronously
-    public void updateHotCount(final int new_hot_number) {
-        hot_number = new_hot_number;
-        if (ui_hot == null) return;
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ui_hot.setVisibility(View.VISIBLE);
-                ui_hot.setText(Integer.toString(new_hot_number));
-            }
-        });
-    }
-
-    /* static abstract class MyMenuItemStuffListener implements View.OnClickListener, View.OnLongClickListener {
-        private String hint;
-        private View view;
-
-        MyMenuItemStuffListener(View view, String hint) {
-            this.view = view;
-            this.hint = hint;
-            view.setOnClickListener(this);
-            view.setOnLongClickListener(this);
-        }
-
-        @Override abstract public void onClick(View v);
-
-        @Override public boolean onLongClick(View v) {
-            final int[] screenPos = new int[2];
-            final Rect displayFrame = new Rect();
-            view.getLocationOnScreen(screenPos);
-            view.getWindowVisibleDisplayFrame(displayFrame);
-            final Context context = view.getContext();
-            final int width = view.getWidth();
-            final int height = view.getHeight();
-            final int midy = screenPos[1] + height / 2;
-            final int screenWidth = context.getResources().getDisplayMetrics().widthPixels;
-            Toast cheatSheet = Toast.makeText(context, hint, Toast.LENGTH_SHORT);
-            if (midy < displayFrame.height()) {
-                cheatSheet.setGravity(Gravity.TOP | Gravity.RIGHT,
-                        screenWidth - screenPos[0] - width / 2, height);
-            } else {
-                cheatSheet.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, height);
-            }
-            cheatSheet.show();
-            return true;
-        }
-    }*/
-
-
     /**
      * Back button listener.
      * Will close the application if the back button pressed twice.

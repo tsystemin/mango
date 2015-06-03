@@ -8,7 +8,7 @@ import java.util.HashMap;
  * Created by diganta.paladhi on 06/05/15.
  */
 public class mangoGlobals extends Application {
-    public static String server_ip = "10.20.102.51";
+    public static String server_ip = "192.168.0.102";
     public static String cname;
     public static String cval;
     public static Integer cookie_set = 0;

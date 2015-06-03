@@ -65,14 +65,6 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".DBHelper"
-            android:label="@string/title_activity_dbhelper"
-            android:parentActivityName=".CategoryActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".CategoryActivity" />
-        </activity>
-        <activity
             android:name=".HttpPostFunction"
             android:label="@string/title_activity_http_post"
             android:parentActivityName=".MainActivity" >

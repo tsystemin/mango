@@ -2,21 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="in.co.tsystem.gamechanger.ViewCartActivity"
-    android:background="#ffffa94f"
-    android:clickable="true" >
-
-    <!--
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="22sp"
-        android:id="@+id/linearLayout1"
-        android:background="#2164b2fa">
-
-    </LinearLayout>
-    -->
+    tools:context="in.co.tsystem.gamechanger.ViewCartActivity" >
 
     <ListView
         android:layout_width="fill_parent"
