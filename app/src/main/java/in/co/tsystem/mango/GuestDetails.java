@@ -114,11 +114,11 @@ public class GuestDetails extends Activity {
                 String postData;
 
                 //AVI - implement guestcheckoutpost - set GUEST variables
-                checkoutUri = "http://" + mg.server_ip + "/opencart/index.php?route=feed/rest_api/guestcheckoutpost";
+                checkoutUri = "http://" + mg.server_ip + "/opencart/index.php?route=feed/rest_api/guestCheckoutpost";
 
-                postData = "{'payment_method' : " + payment_method + ", 'payment_address' : " + guest_address + ", 'shipping_method' : flat.flat" +
-                        ", 'shipping_address' : " + guest_address + ", 'name' : " + guest_name + ", 'email' : " + guest_email + ", 'phone' : " +
-                        guest_phone + ", 'pin' : " + guest_pin + "}";
+                postData = "{'payment_method' : " + payment_method + ", 'payment_address_guest' : " + guest_address + ", 'shipping_method' : flat.flat" +
+                        ", 'shipping_address_guest' : " + guest_address + ", 'name_guest' : " + guest_name + ", 'email_guest' : " + guest_email + ", 'phone_guest' : " +
+                        guest_phone + ", 'pin_guest' : " + guest_pin + "}";
                 guestcheckoutPost chk = new guestcheckoutPost(GuestDetails.this);
                 chk.execute(checkoutUri, postData);
             }
