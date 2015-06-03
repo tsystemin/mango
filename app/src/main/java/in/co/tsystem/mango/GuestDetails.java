@@ -15,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
@@ -36,6 +37,9 @@ public class GuestDetails extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guest_details);
+
+        TextView total_price = (TextView) findViewById(R.id.textView1);
+        total_price.setText(String.valueOf(mg.total_cart_price));
 
         Button login = (Button)findViewById(R.id.login_to_checkout);
         login.setOnClickListener(new View.OnClickListener() {

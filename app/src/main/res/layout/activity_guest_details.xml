@@ -10,171 +10,186 @@
     android:background="#ffffffff">
 
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="in.co.tsystem.mango.CheckoutActivity"
-    android:background="#ffffffff"
-    android:clickable="false"
-    android:minHeight="630sp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="in.co.tsystem.mango.CheckoutActivity"
+        android:background="#ffffffff"
+        android:clickable="false"
+        android:minHeight="630sp">
 
-    <TextView
-        android:layout_width="200sp"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="TOTAL 0"
-        android:id="@+id/textView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:textColor="#ff000000" />
+        <LinearLayout
+            android:id="@+id/totalView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" >
 
-    <Button
-        android:layout_width="100sp"
-        android:layout_height="30sp"
-        android:text="Place Order"
-        android:id="@+id/chkguest"
-        android:background="#ffff692c"
-        android:textColor="#ffffffff"
-        android:singleLine="false"
-        android:layout_alignParentBottom="true"
-        android:layout_marginRight="25dp"
-        android:layout_marginEnd="25dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="TOTAL  "
+                android:id="@+id/textView"
+                android:textColor="#ff000000" />
 
-    <Button
-        android:layout_width="100sp"
-        android:layout_height="30sp"
-        android:text="Clear Cart"
-        android:id="@+id/clearcartguest"
-        android:background="#ffff692c"
-        android:textColor="#ffffffff"
-        android:singleLine="false"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/textView"
-        android:layout_toEndOf="@+id/textView" />
+            <TextView
+                android:layout_width="200sp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/textView1"
+                android:layout_toRightOf="@id/textView"
+                android:textColor="#ff000000" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="75sp"
-        android:id="@+id/guest_addr"
-        android:hint=" Address"
-        android:gravity="top"
-        android:textColor="#000000"
-        android:imeActionId="@+id/bill_addr_ime"
-        android:textColorHint="#3673509b"
-        android:layout_below="@+id/guest_email"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        </LinearLayout>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="50sp"
-        android:id="@+id/guest_name"
-        android:hint="Name"
-        android:gravity="top"
-        android:textColor="#000000"
-        android:imeActionId="@+id/bill_addr_ime"
-        android:textColorHint="#3673509b"
-        android:layout_marginTop="66dp"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        <Button
+            android:layout_width="100sp"
+            android:layout_height="30sp"
+            android:text="Place Order"
+            android:id="@+id/chkguest"
+            android:background="#ffff692c"
+            android:textColor="#ffffffff"
+            android:singleLine="false"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="25dp"
+            android:layout_marginEnd="25dp" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="50sp"
-        android:id="@+id/guest_phone"
-        android:hint="Phone Number"
-        android:gravity="top"
-        android:textColor="#000000"
-        android:imeActionId="@+id/bill_addr_ime"
-        android:textColorHint="#3673509b"
-        android:layout_below="@+id/guest_name"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="19dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        <Button
+            android:layout_width="100sp"
+            android:layout_height="30sp"
+            android:text="Clear Cart"
+            android:id="@+id/clearcartguest"
+            android:background="#ffff692c"
+            android:textColor="#ffffffff"
+            android:singleLine="false"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/textView"
+            android:layout_toEndOf="@+id/textView" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="50sp"
-        android:id="@+id/guest_email"
-        android:hint="Email address"
-        android:gravity="top"
-        android:textColor="#000000"
-        android:imeActionId="@+id/bill_addr_ime"
-        android:textColorHint="#3673509b"
-        android:layout_below="@+id/guest_phone"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="75sp"
+            android:id="@+id/guest_addr"
+            android:hint=" Address"
+            android:gravity="top"
+            android:textColor="#000000"
+            android:imeActionId="@+id/bill_addr_ime"
+            android:textColorHint="#3673509b"
+            android:layout_below="@+id/guest_email"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="50sp"
-        android:id="@+id/guest_pin"
-        android:hint="Pincode"
-        android:gravity="top"
-        android:textColor="#000000"
-        android:imeActionId="@+id/bill_addr_ime"
-        android:textColorHint="#3673509b"
-        android:layout_below="@+id/guest_addr"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="25dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="50sp"
+            android:id="@+id/guest_name"
+            android:hint="Name"
+            android:gravity="top"
+            android:textColor="#000000"
+            android:imeActionId="@+id/bill_addr_ime"
+            android:textColorHint="#3673509b"
+            android:layout_marginTop="66dp"
+            android:layout_below="@+id/textView"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="50sp"
+            android:id="@+id/guest_phone"
+            android:hint="Phone Number"
+            android:gravity="top"
+            android:textColor="#000000"
+            android:imeActionId="@+id/bill_addr_ime"
+            android:textColorHint="#3673509b"
+            android:layout_below="@+id/guest_name"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="19dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="50sp"
+            android:id="@+id/guest_email"
+            android:hint="Email address"
+            android:gravity="top"
+            android:textColor="#000000"
+            android:imeActionId="@+id/bill_addr_ime"
+            android:textColorHint="#3673509b"
+            android:layout_below="@+id/guest_phone"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="50sp"
+            android:id="@+id/guest_pin"
+            android:hint="Pincode"
+            android:gravity="top"
+            android:textColor="#000000"
+            android:imeActionId="@+id/bill_addr_ime"
+            android:textColorHint="#3673509b"
+            android:layout_below="@+id/guest_addr"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
 
 
-    <Button
-        android:layout_width="150sp"
-        android:layout_height="40sp"
-        android:text="Login"
-        android:id="@+id/login_to_checkout"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="#FF000000"
-        android:textColor="#FFFFFFFF" />
+        <Button
+            android:layout_width="150sp"
+            android:layout_height="40sp"
+            android:text="Login"
+            android:id="@+id/login_to_checkout"
+            android:layout_below="@+id/totalView"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="#FF000000"
+            android:textColor="#FFFFFFFF" />
 
-    <RadioGroup
-        android:id="@+id/radioGroupGuest1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="fill_horizontal"
-        android:layout_below="@+id/guest_pin"
-        android:layout_alignLeft="@+id/guest_pin"
-        android:layout_alignStart="@+id/guest_pin"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cash on Delivery"
-        android:id="@+id/radioButton"
-        android:layout_below="@+id/guest_pin"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="65dp"
-        android:textColor="#ff000000" />
+        <RadioGroup
+            android:id="@+id/radioGroupGuest1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="fill_horizontal"
+            android:layout_below="@+id/guest_pin"
+            android:layout_alignLeft="@+id/guest_pin"
+            android:layout_alignStart="@+id/guest_pin"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true">
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cash on Delivery"
+            android:id="@+id/radioButton"
+            android:layout_below="@+id/guest_pin"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="65dp"
+            android:textColor="#ff000000" />
 
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Card on Delivery"
-        android:id="@+id/radioButton2"
-        android:layout_below="@+id/radioButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:textColor="#ff000000"/>
-    </RadioGroup>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Card on Delivery"
+            android:id="@+id/radioButton2"
+            android:layout_below="@+id/radioButton"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:textColor="#ff000000"/>
+        </RadioGroup>
 
-</RelativeLayout>
+    </RelativeLayout>
 </ScrollView>

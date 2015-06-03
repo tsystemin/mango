@@ -72,10 +72,6 @@ public class ViewCartActivity extends Activity {
         //tsk.execute();
     }
 
-    public void checkOut (View view) {
-        //Intent intent = new Intent(this, CheckOutActivity.class);
-        //startActivity(intent);
-    }
     private class myViewCartAsyncTask extends AsyncTask<Void, Void, JSONObject> {
         JSONObject jb;
         private Context mContext;
@@ -140,6 +136,8 @@ public class ViewCartActivity extends Activity {
                     list_prod.add(prod_name);
                     ProdIdMap.put(prod_name, prod_id);
                     */
+                    // Calculate total price
+                    mg.total_cart_price += Integer.parseInt(unit_price) * Integer.parseInt(quantity);
 
                     HashMap<String,String> temp=new HashMap<String, String>();
                     temp.put(mg.FIRST_COLUMN, prod_name);
@@ -368,6 +366,8 @@ public class ViewCartActivity extends Activity {
             String cartBulkAddUri = "http://"+ mg.server_ip +"/opencart/index.php?route=feed/rest_api/cart_add_bulk";
             String postData="";
 
+            //mg.total_cart_price = 0;
+
             for (cart_item item : mg.local_cart.values()) {
                 if (!item.added_to_cart || item.item_changed) {
                     //postData += "{'product_id' : " + item.prod_id + ", 'quantity' : " + item.quantity + "}";
@@ -376,6 +376,9 @@ public class ViewCartActivity extends Activity {
                         JSONObject obj = new JSONObject();
                         obj.put("product_id", item.prod_id);
                         obj.put("quantity", item.quantity);
+                        //obj.put("unit_price", item.price);
+
+                        //mg.total_cart_price += Math.round(item.price) * Math.round(item.quantity);
                         objArray.put(obj);
                     } catch (Exception e){
                         e.printStackTrace();

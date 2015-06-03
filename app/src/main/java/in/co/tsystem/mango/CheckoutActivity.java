@@ -36,6 +36,7 @@ public class CheckoutActivity extends Activity {
     String payment_method;
     EditText billing_addr, delivery_addr;
     CheckBox use_same_addr, use_reg_addr;
+    TextView total_price;
     mangoGlobals mg = mangoGlobals.getInstance();
 
 
@@ -71,6 +72,9 @@ public class CheckoutActivity extends Activity {
             }
         });
         */
+
+        total_price = (TextView) findViewById(R.id.textView1);
+        total_price.setText(String.valueOf(mg.total_cart_price));
 
         billing_addr = (EditText) findViewById(R.id.bill_addr);
         delivery_addr = (EditText) findViewById(R.id.deli_addr);
