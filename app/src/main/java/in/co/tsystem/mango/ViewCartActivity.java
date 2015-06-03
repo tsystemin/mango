@@ -12,6 +12,7 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
@@ -137,7 +138,7 @@ public class ViewCartActivity extends Activity {
                     ProdIdMap.put(prod_name, prod_id);
                     */
                     // Calculate total price
-                    mg.total_cart_price += Integer.parseInt(unit_price) * Integer.parseInt(quantity);
+                    mg.total_cart_price += Double.parseDouble(total_price);
 
                     HashMap<String,String> temp=new HashMap<String, String>();
                     temp.put(mg.FIRST_COLUMN, prod_name);
@@ -154,6 +155,10 @@ public class ViewCartActivity extends Activity {
 
                 ListViewAdapter adapter=new ListViewAdapter(ViewCartActivity.this, list_prod);
                 listview1.setAdapter(adapter);
+
+                TextView cv = (TextView)findViewById(R.id.cart_total);
+                String rounded = String.format("%.2f", mg.total_cart_price);
+                cv.setText(rounded);
 
                 Button b = (Button)findViewById(R.id.check_out);
                 b.setOnClickListener(new View.OnClickListener() {
