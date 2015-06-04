@@ -4,6 +4,8 @@ package in.co.tsystem.mango;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.media.Image;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -67,6 +69,9 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
 
         tv = (TextView) findViewById(R.id.hotlist_hot);
         tv.setOnClickListener(this);
+
+        ImageView callIcon = (ImageView) findViewById(R.id.callImage);
+        callIcon.setOnClickListener(this);
 
         Resources resource = getResources();
         drawer_array = resource.getStringArray(R.array.nav_drawer_array);
@@ -145,6 +150,10 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
             case R.id.hotlist_hot:
                 view_cart(view);
                 break;
+            case R.id.callImage:
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:9986380357"));
+                startActivity(intent);
             default:
                 break;
         }
