@@ -5,8 +5,12 @@ package in.co.tsystem.mango;
  */
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Window;
+
+import org.apache.http.HttpResponse;
+import org.json.JSONObject;
 
 
 public class MainActivity extends Activity {
@@ -18,14 +22,10 @@ public class MainActivity extends Activity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
-        try {
-            Thread.sleep(10000);
-        } catch (Exception e) {
-            Thread.dumpStack();
-        }
+        gotocategoty gc = new gotocategoty();
+        gc.execute();
 
-        Intent intent = new Intent(this, CategoryActivity.class);
-        startActivity(intent);
+
 
     }
 
@@ -47,4 +47,29 @@ public class MainActivity extends Activity {
         super.onSaveInstanceState(outState);
     }
 
+    private class gotocategoty extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            Intent intent = new Intent(MainActivity.this, CategoryActivity.class);
+            startActivity(intent);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+
+            try {
+                Thread.sleep(5000);
+            } catch (Exception e) {
+                Thread.dumpStack();
+            }
+            return null;
+        }
+    }
 }
