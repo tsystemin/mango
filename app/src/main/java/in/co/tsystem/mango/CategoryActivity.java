@@ -231,6 +231,9 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
+            //Intent intent = new Intent(this, LogoutActivity.class);
+            //startActivity(intent);
+
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
