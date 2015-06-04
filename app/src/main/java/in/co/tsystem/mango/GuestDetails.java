@@ -4,14 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -44,7 +41,7 @@ public class GuestDetails extends Activity {
         Button login = (Button)findViewById(R.id.login_to_checkout);
         login.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intentlogin = new Intent(GuestDetails.this, GcLoginActivity.class);
+                Intent intentlogin = new Intent(GuestDetails.this, LoginActivity.class);
                 intentlogin.putExtra("CallerActivity", "guestdetails");
                 startActivity(intentlogin);
             }

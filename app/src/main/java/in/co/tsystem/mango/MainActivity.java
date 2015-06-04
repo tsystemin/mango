@@ -22,11 +22,8 @@ public class MainActivity extends Activity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
-        gotocategoty gc = new gotocategoty();
+        gotoCategory gc = new gotoCategory();
         gc.execute();
-
-
-
     }
 
     @Override
@@ -47,7 +44,7 @@ public class MainActivity extends Activity {
         super.onSaveInstanceState(outState);
     }
 
-    private class gotocategoty extends AsyncTask<Void, Void, Void> {
+    private class gotoCategory extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPostExecute(Void result) {

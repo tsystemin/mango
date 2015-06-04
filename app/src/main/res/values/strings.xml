@@ -9,7 +9,7 @@
         <item>Login</item>
         <item>Logout</item>
         <item>Credits</item>
-        <item>Contact Us</item>
+        <item>Call Us</item>
         <item>Checkout</item>
     </string-array>
 
@@ -30,5 +30,6 @@
     <string name="title_activity_product_detail">ProductDetailActivity</string>
     <string name="title_activity_checkout">CheckoutActivity</string>
     <string name="title_activity_guest_details">GuestDetails</string>
+    <string name="title_activity_logout">LogoutActivity</string>
 
 </resources>

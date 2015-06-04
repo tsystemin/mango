@@ -4,7 +4,6 @@ package in.co.tsystem.mango;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,9 +12,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +21,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +41,7 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
     TextView tv;
     ActionBarDrawerToggle actionBarDrawerToggle;
     private ListView mDrawerListView;
+    DrawerLayout drawerLayout;
 
     Boolean doubleBackToExitPressedOnce = false;
     mangoGlobals mg = mangoGlobals.getInstance();
@@ -70,9 +68,6 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
         tv = (TextView) findViewById(R.id.hotlist_hot);
         tv.setOnClickListener(this);
 
-        ImageView callIcon = (ImageView) findViewById(R.id.callImage);
-        callIcon.setOnClickListener(this);
-
         Resources resource = getResources();
         drawer_array = resource.getStringArray(R.array.nav_drawer_array);
 
@@ -80,7 +75,7 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
         parent_tsk.execute();
 
         // navigation drawer new
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         mDrawerListView = (ListView) findViewById(R.id.NavList1);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -150,10 +145,6 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
             case R.id.hotlist_hot:
                 view_cart(view);
                 break;
-            case R.id.callImage:
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:9986380357"));
-                startActivity(intent);
             default:
                 break;
         }
@@ -190,19 +181,23 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
                     view_cart(null);
                     break;
                 case 4:
-                    Intent intent = new Intent(this, GcLoginActivity.class);
+                    Intent intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);
                     break;
                 case 5:
-                    //intent = new Intent(MainActivity.this, SaradaDevi.class);
-                    //startActivity(intent);
+                    drawerLayout.closeDrawer(Gravity.LEFT);
+                    intent = new Intent(this, LogoutActivity.class);
+                    startActivity(intent);
                     break;
                 case 6:
                     //intent = new Intent(MainActivity.this, SwamiVivekananda.class);
                     //startActivity(intent);
                     break;
                 case 7:
-                    intent = new Intent(this, GuestDetails.class);
+                    //intent = new Intent(this, GuestDetails.class);
+                    //startActivity(intent);
+                    intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse("tel:9986380357"));
                     startActivity(intent);
                     break;
                 case 8:
@@ -236,9 +231,6 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
-            // Logout from the app
-            logout();
-
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
@@ -356,48 +348,6 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
     public void view_cart(View view) {
         Intent intent = new Intent(this, ViewCartActivity.class);
         startActivity(intent);
-    }
-
-    public void logout() {
-        String logoutUri = "http://"+ mg.server_ip +"/opencart/index.php?route=feed/rest_api/customerLogout";
-        String postData = "{'email' : dummy}";
-
-        try {
-            logOut tsk = new logOut();
-            tsk.execute(logoutUri, postData);
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
-
-        mg.cname = null;
-        mg.cval = null;
-    }
-
-    private class logOut extends AsyncTask<String, Void, HttpResponse> {
-
-        @Override
-        protected void onPostExecute(HttpResponse result) {
-            super.onPostExecute(result);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected HttpResponse doInBackground(String... arg0) {
-            HttpResponse response = null;
-            try {
-                JSONObject obj = new JSONObject(arg0[1]);
-                HttpPostFunction sChannel = new HttpPostFunction();
-                response = sChannel.processPost(arg0[0], obj);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return response;
-        }
     }
 }
 

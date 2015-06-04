@@ -3,6 +3,7 @@
     package="in.co.tsystem.mango" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <application
         android:name=".mangoGlobals"
@@ -19,12 +20,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".GcLoginActivity"
+            android:name=".LoginActivity"
             android:label="@string/title_activity_gc_login"
-            android:parentActivityName=".MainActivity"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
@@ -79,6 +78,15 @@
         <activity
             android:name=".GuestDetails"
             android:label="@string/title_activity_guest_details" >
+        </activity>
+        <activity
+            android:name=".LogoutActivity"
+            android:label="@string/title_activity_logout"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.AppCompat.Light" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="in.co.tsystem.mango.MainActivity" />
         </activity>
     </application>
 

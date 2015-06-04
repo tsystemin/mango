@@ -3,6 +3,8 @@ package in.co.tsystem.mango;
 /**
  * Created by diganta.paladhi on 20/04/15.
  */
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -22,16 +24,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -47,7 +46,7 @@ import java.util.List;
 /**
  * A login screen that offers login via email/password.
  */
-public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -61,6 +60,7 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
     private View mLoginFormView;
     private HttpResponse response;
     String caller = "";
+    String possibleEmail="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,23 +71,12 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
         if (extras != null) {
              caller = extras.getString("CallerActivity");
         }
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
+        //populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -103,14 +92,19 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
         mProgressView = findViewById(R.id.login_progress);
     }
 
-    // Return to main screen on back pressed
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
     private void populateAutoComplete() {
-        getLoaderManager().initLoader(0, null, this);
+        //getLoaderManager().initLoader(0, null, this);
+        Account[] accounts = AccountManager.get(this).getAccounts();
+        for (Account account : accounts)
+        {
+
+            // TODO: Check possibleEmail against an email regex or treat
+
+            // account.name as an email address only for certain account.type values.
+            possibleEmail = account.name;
+
+        }
+        mEmailView.setText(possibleEmail);
     }
 
     /**
@@ -278,7 +272,7 @@ public class GcLoginActivity extends Activity implements LoaderCallbacks<Cursor>
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(GcLoginActivity.this,
+                new ArrayAdapter<String>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);

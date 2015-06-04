@@ -5,16 +5,6 @@
     android:layout_height="match_parent" >
 
     <ImageView
-        android:id="@+id/callImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/call_icon"
-        android:clickable="true"
-        android:layout_marginTop="2sp"
-        android:layout_marginBottom="2sp"
-        android:layout_alignRight="@+id/imageView4" />
-
-    <ImageView
         android:id="@+id/imageView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
