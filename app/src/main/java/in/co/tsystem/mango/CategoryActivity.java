@@ -190,8 +190,8 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
                     view_cart(null);
                     break;
                 case 4:
-                    //intent = new Intent(MainActivity.this, SriRamakrishna.class);
-                    //startActivity(intent);
+                    Intent intent = new Intent(this, GcLoginActivity.class);
+                    startActivity(intent);
                     break;
                 case 5:
                     //intent = new Intent(MainActivity.this, SaradaDevi.class);
@@ -202,13 +202,13 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
                     //startActivity(intent);
                     break;
                 case 7:
-                    Intent intentgd = new Intent(this, GuestDetails.class);
-                    startActivity(intentgd);
+                    intent = new Intent(this, GuestDetails.class);
+                    startActivity(intent);
                     break;
                 case 8:
                     //intent = new Intent(MainActivity.this, BranchesActivity.class);
                     //startActivity(intent);
-                    Intent intent = new Intent(this, CheckoutActivity.class);
+                    intent = new Intent(this, CheckoutActivity.class);
                     startActivity(intent);
                     break;
                 case 9:
