@@ -13,6 +13,7 @@ public class mangoGlobals extends Application {
     public static String cval;
     public static Integer cookie_set = 0;
     public static Integer total_cart_price = 0;
+    public static Integer no_of_items_in_cart = 0;
     private static mangoGlobals singleInstance = null;
     public static mangoGlobals getInstance() {
         return singleInstance;
