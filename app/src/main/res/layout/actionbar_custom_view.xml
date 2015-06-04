@@ -10,7 +10,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginRight="0dp"
-        android:src="@drawable/shopping_cart"
+        android:src="@drawable/dinner_plate"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
+        android:paddingRight="8dp"
         android:clickable="true"
         android:onClick="view_cart" />
     
@@ -25,8 +28,8 @@
         android:text="0"
         android:layout_alignTop="@id/imageView4"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="47dp"
-        android:layout_marginTop="17dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="15dp"
         android:paddingBottom="1dp"
         android:paddingRight="4dp"
         android:paddingLeft="4dp"
