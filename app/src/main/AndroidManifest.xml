@@ -88,6 +88,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="in.co.tsystem.mango.MainActivity" />
         </activity>
+        <activity
+            android:name=".OrderDetails"
+            android:label="@string/title_activity_order_details" >
+        </activity>
     </application>
 
 </manifest>

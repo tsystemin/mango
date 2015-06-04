@@ -2,6 +2,7 @@ package in.co.tsystem.mango;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -217,8 +218,17 @@ public class CheckoutActivity extends Activity {
                     cartClearfrmchkout cc = new cartClearfrmchkout(mContext);
                     cc.execute();
 
+                    JSONObject j = new JSONObject(myresult);
+                    String or_id = j.getString("order_id");
+
                     Toast.makeText(getApplicationContext(), "Your order is placed successfully",
                             Toast.LENGTH_LONG).show();
+
+                    // show order details
+                    Intent intent = new Intent(mContext, OrderDetails.class);
+                    //intent.putExtra("order_id", 135);
+                    intent.putExtra("order_id", Integer.parseInt(or_id));
+                    startActivity(intent);
                 } else {
                     Log.d("CHECKOUT ERROR", "code" + myresult);
                     Toast.makeText(getApplicationContext(), myresult,

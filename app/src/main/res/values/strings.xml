@@ -31,5 +31,6 @@
     <string name="title_activity_checkout">CheckoutActivity</string>
     <string name="title_activity_guest_details">GuestDetails</string>
     <string name="title_activity_logout">LogoutActivity</string>
+    <string name="title_activity_order_details">OrderDetails</string>
 
 </resources>
