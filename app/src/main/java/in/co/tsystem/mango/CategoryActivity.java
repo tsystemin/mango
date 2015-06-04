@@ -159,8 +159,6 @@ public class CategoryActivity extends ActionBarActivity implements View.OnClickL
         }
     }
 
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Pass the event to ActionBarDrawerToggle, if it returns
