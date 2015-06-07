@@ -167,11 +167,20 @@ public class GuestDetails extends Activity {
 
                 if (myresult.contains("PASS")) {
 
-                    //cartClearfrmchkout cc = new cartClearfrmchkout(mContext);
-                    //cc.execute();
+                    cartClearfrmchkoutguest cc = new cartClearfrmchkoutguest(mContext);
+                    cc.execute();
+                    JSONObject j = new JSONObject(myresult);
+                    String or_id = j.getString("order_id");
 
                     Toast.makeText(getApplicationContext(), "Your order is placed successfully",
                             Toast.LENGTH_LONG).show();
+
+                    Intent intent = new Intent(mContext, OrderDetails.class);
+                    //intent.putExtra("order_id", 135);
+                    intent.putExtra("order_id", Integer.parseInt(or_id));
+                    startActivity(intent);
+
+
                 } else {
                     Log.d("CHECKOUT ERROR", "code" + myresult);
                     Toast.makeText(getApplicationContext(), myresult,
@@ -206,5 +215,52 @@ public class GuestDetails extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         return super.onOptionsItemSelected(item);
+    }
+
+    private class cartClearfrmchkoutguest extends AsyncTask< Void, Void, JSONObject > {
+
+        JSONObject jb;
+        private Context mContext;
+        BufferedReader br;
+
+        public cartClearfrmchkoutguest(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject result) {
+            super.onPostExecute(result);
+            //clear the cart on APP
+            mg.local_cart.clear();
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected JSONObject doInBackground(Void... arg) {
+
+            String url_new = null, ver = null;
+            int version = 0;
+
+            mangoGlobals mg = mangoGlobals.getInstance();
+            String server_ip = mg.server_ip;
+            url_new = "http://"+ server_ip +"/opencart/?route=feed/rest_api/cart_clear&key=1234"; // add count
+
+            //Log.i("PRODDET prod_id is", arg[0] + "");
+            ServerComm.RestService re = new ServerComm.RestService();
+            jb = re.doGet(url_new);
+            try {
+                //ver = jb.getString("db_ver");
+                //version = Integer.parseInt(ver);
+                Log.i("PRODDET", jb.toString() + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return jb;
+        }
     }
 }
