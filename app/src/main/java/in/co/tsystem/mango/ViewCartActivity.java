@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
@@ -39,6 +38,8 @@ public class ViewCartActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_view_cart);
 
+
+
         // Change the cart window size.
         // Calculate ActionBar height
 /*        Integer actionBarHeight = 0;
@@ -66,7 +67,7 @@ public class ViewCartActivity extends Activity {
 */
         mangoGlobals mg = mangoGlobals.getInstance();
 
-        addtsk = new addToCartFromLocal(this);
+        addtsk = new addToCartFromLocal(this, false);
         addtsk.execute();
 
         //tsk = new myViewCartAsyncTask(this);
@@ -78,6 +79,8 @@ public class ViewCartActivity extends Activity {
         private Context mContext;
         BufferedReader br;
         HashMap<String, Integer> ProdIdMap = new HashMap<String, Integer>();
+        addToCartFromLocal addtsk;
+
 
         private class StableArrayAdapter extends ArrayAdapter<String> {
 
@@ -118,18 +121,18 @@ public class ViewCartActivity extends Activity {
             String quantity;
             String unit_price;
             String total_price;
-
-            Integer prod_id;
+            String prod_id;
             final ListView listview1 = (ListView) findViewById(R.id.listView1);
             ArrayList<HashMap<String, String>> list_prod = new ArrayList<HashMap<String, String>>();
 
             try {
                 cart_items = result.getJSONArray("product");
+                mg.total_cart_price = 0.0;
                 for (int i = 0; i < cart_items.length(); i++) {
 
                     item = cart_items.getJSONObject(i);
                     prod_name  = item.getString("name");
-                    prod_id = item.getInt("product_id");
+                    prod_id = item.getString("product_id");
                     quantity = item.getString("quantity");
                     unit_price = item.getString("price");
                     total_price = item.getString("total");
@@ -145,6 +148,7 @@ public class ViewCartActivity extends Activity {
                     temp.put(mg.SECOND_COLUMN, quantity);
                     temp.put(mg.THIRD_COLUMN, unit_price);
                     temp.put(mg.FOURTH_COLUMN, total_price);
+                    temp.put(mg.FIFTH_COLUMN, prod_id);
 
                     list_prod.add(temp);
 
@@ -160,6 +164,23 @@ public class ViewCartActivity extends Activity {
                 String rounded = String.format("%.2f", mg.total_cart_price);
                 cv.setText(rounded);
 
+                adapter.setOnDataChangeListener(new ListViewAdapter.OnDataChangeListener() {
+                    public void onDataChanged(Double price, boolean add) {
+                        if (add) {
+                            mg.total_cart_price += price;
+                        } else {
+                            mg.total_cart_price -= price;
+                        }
+
+                        TextView cv = (TextView)findViewById(R.id.cart_total);
+                        String rounded = String.format("%.2f", mg.total_cart_price);
+                        cv.setText(rounded);
+
+                    }
+                });
+
+
+
                 Button b = (Button)findViewById(R.id.check_out);
                 b.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v)
@@ -167,6 +188,9 @@ public class ViewCartActivity extends Activity {
                         //DO SOMETHING! {RUN SOME FUNCTION ... DO CHECKS... ETC}
                         //checkOutFromStore chkout_tsk = new checkOutFromStore(mContext);
                         //chkout_tsk.execute();
+                        addtsk = new addToCartFromLocal(mContext, true);
+                        addtsk.execute();
+/*
                         Intent intent;
 
                         if (mg.user.isEmpty() || mg.passwd.isEmpty()) {
@@ -177,8 +201,9 @@ public class ViewCartActivity extends Activity {
                             intent = new Intent(ViewCartActivity.this, CheckoutActivity.class);
                             startActivity(intent);
                         }
-
+*/
                     }
+
                 });
 
                 Button b1 = (Button)findViewById(R.id.clear_cart);
@@ -341,16 +366,34 @@ public class ViewCartActivity extends Activity {
         private Context mContext;
         BufferedReader br;
         myViewCartAsyncTask tsk;
+        boolean is_checkout;
 
-        public addToCartFromLocal(Context context) {
+        public addToCartFromLocal(Context context, boolean checkout) {
+
             mContext = context;
+            is_checkout = checkout;
         }
 
         @Override
         protected void onPostExecute(JSONObject result) {
-            super.onPostExecute(result);
-            tsk = new myViewCartAsyncTask(mContext);
-            tsk.execute();
+            if (!is_checkout) {
+                super.onPostExecute(result);
+                tsk = new myViewCartAsyncTask(mContext);
+                tsk.execute();
+            } else {
+                //write code to open checkout activity
+                Intent intent;
+
+                if (mg.user.isEmpty() || mg.passwd.isEmpty()) {
+                    intent = new Intent(ViewCartActivity.this, GuestDetails.class);
+                    startActivity(intent);
+
+                } else {
+                    intent = new Intent(ViewCartActivity.this, CheckoutActivity.class);
+                    startActivity(intent);
+                }
+
+            }
         }
 
         @Override
@@ -374,7 +417,7 @@ public class ViewCartActivity extends Activity {
             //mg.total_cart_price = 0;
 
             for (cart_item item : mg.local_cart.values()) {
-                if (!item.added_to_cart || item.item_changed) {
+             //   if (!item.added_to_cart || item.item_changed) {
                     //postData += "{'product_id' : " + item.prod_id + ", 'quantity' : " + item.quantity + "}";
                     item.added_to_cart = true;
                     try {
@@ -388,7 +431,7 @@ public class ViewCartActivity extends Activity {
                     } catch (Exception e){
                         e.printStackTrace();
                     }
-                }
+               // }
             }
             try {
                 mainobj.put("products", objArray);

@@ -59,7 +59,17 @@ public class ListViewAdapter extends BaseAdapter {
         Button dec;
         TextView txtThird;
         TextView txtFourth;
+        TextView txtFifth;
 
+    }
+    public interface OnDataChangeListener{
+        public void onDataChanged(Double size, boolean add);
+    }
+
+    OnDataChangeListener mOnDataChangeListener;
+
+    public void setOnDataChangeListener(OnDataChangeListener onDataChangeListener){
+        mOnDataChangeListener = onDataChangeListener;
     }
 
     @Override
@@ -82,6 +92,7 @@ public class ListViewAdapter extends BaseAdapter {
             holder.dec = (Button) convertView.findViewById(R.id.dec);
             holder.txtThird=(TextView) convertView.findViewById(R.id.TextThird);
             holder.txtFourth = (TextView) convertView.findViewById(R.id.TextFourth);
+            holder.txtFifth = (TextView) convertView.findViewById(R.id.TextFifth);
 
 
             convertView.setTag(holder);
@@ -90,18 +101,24 @@ public class ListViewAdapter extends BaseAdapter {
             holder=(ViewHolder) convertView.getTag();
         }
 
-        mangoGlobals mg = mangoGlobals.getInstance();
+        final mangoGlobals mg = mangoGlobals.getInstance();
 
         HashMap<String, String> map=list.get(position);
         holder.txtFirst.setText(map.get(mg.FIRST_COLUMN));
         holder.txtSecond.setText(map.get(mg.SECOND_COLUMN));
         holder.txtThird.setText(map.get(mg.THIRD_COLUMN));
         holder.txtFourth.setText(map.get(mg.FOURTH_COLUMN));
+        holder.txtFifth.setText(map.get(mg.FIFTH_COLUMN));
+
         final TextView quantity = (TextView)convertView.findViewById(R.id.TextSecond);
         final TextView total_price = (TextView)convertView.findViewById(R.id.TextFourth);
         final TextView unit_price = (TextView)convertView.findViewById(R.id.TextThird);
+        final TextView prod_id = (TextView) convertView.findViewById(R.id.TextFifth);
+    //    final TextView total_cart = (TextView) convertView.findViewById(R.id.cart_total);
+
 
         holder.inc.setOnClickListener(new View.OnClickListener() {
+
             public void onClick(View v) {
                 CharSequence cnt = quantity.getText();
                 Integer c = Integer.parseInt(cnt.toString());
@@ -109,10 +126,32 @@ public class ListViewAdapter extends BaseAdapter {
                 CharSequence myprice = unit_price.getText();
                 Double pr = Double.parseDouble(myprice.toString());
 
+                CharSequence prodid = prod_id.getText();
+                Integer pid = Integer.parseInt(prodid.toString());
+
+                /* update the global variable local_cart, total price of this item*/
+                cart_item ci = new cart_item();
+                ci = mg.local_cart.get(pid);
+                ci.quantity += 1;
+                ci.total += pr;
+                ci.item_changed = true;
+
+                if(mOnDataChangeListener != null){
+                    mOnDataChangeListener.onDataChanged(pr, true);
+                }
+
                 c++;
                 pr *= c;
                 quantity.setText(c.toString());
                 total_price.setText(pr.toString());
+
+
+                /* update the cart value.. total cart value of all items
+                CharSequence ctotal = total_cart.getText();
+                Double c_total = Double.parseDouble(ctotal.toString());
+                c_total += ci.price;
+                total_cart.setText(c_total.toString());
+                */
             }
         });
         holder.dec.setOnClickListener(new View.OnClickListener() {
@@ -123,9 +162,23 @@ public class ListViewAdapter extends BaseAdapter {
                 CharSequence myprice = unit_price.getText();
                 Double pr = Double.parseDouble(myprice.toString());
 
+                CharSequence prodid = prod_id.getText();
+                Integer pid = Integer.parseInt(prodid.toString());
+
+                /* update the global variable local_cart, total price of this item*/
+                cart_item ci = new cart_item();
+                ci = mg.local_cart.get(pid);
+                ci.quantity -= 1;
+                ci.total -= pr;
+                ci.item_changed = true;
+
 
                 if (c > 0) {
                     c--;
+                    if(mOnDataChangeListener != null){
+                        mOnDataChangeListener.onDataChanged(pr, false);
+                    }
+
                     pr *= c;
 
                     quantity.setText(c.toString());

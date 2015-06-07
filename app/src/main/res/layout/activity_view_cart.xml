@@ -23,7 +23,6 @@
         android:layout_width="200sp"
         android:layout_weight="1"
         android:width="0dp"
-        android:text="cart_total"
         android:textColor="#ff000000"
         android:gravity="center"
         android:layout_above="@+id/clear_cart"
